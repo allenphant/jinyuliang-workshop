@@ -1,0 +1,943 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="./assets/index-BQELNeD6.css" data-rsc-css-href="./assets/index-BQELNeD6.css" data-precedence="vite-rsc/importer-resources"/><link rel="modulepreload" href="./assets/layout-segment-context-D0J6t4-g.js" crossorigin=""/><link rel="modulepreload" href="./assets/rolldown-runtime-S-ySWqyJ.js" crossorigin=""/><link rel="modulepreload" href="./assets/index-Cal9Q6Va.js" crossorigin=""/><link rel="modulepreload" href="./assets/framework-CXnKph_e.js" crossorigin=""/><link rel="modulepreload" href="./assets/page-GCHJ80Xb.js" crossorigin=""/><title>金玉良炎：AI 公衛資料分析工作坊</title><meta name="description" content="沿著宮廷群聚調查故事，使用 Python、Google Colab 與 Gemini 把公衛問題逐步轉成可驗證的分析。"/><meta property="og:title" content="金玉良炎：AI 公衛資料分析工作坊"/><meta property="og:description" content="從七份疑似通報開始，把病例定義、流行曲線、食品分析、調整模型與證據整合寫成 Python。"/><meta property="og:type" content="website"/><meta property="og:image" content="https://jinyuliang-workshop.allenphant11.chatgpt.site/og.png"/><meta property="og:image:width" content="1672"/><meta property="og:image:height" content="941"/><meta property="og:image:alt" content="金玉良炎 AI 公衛資料分析工作坊"/><meta name="twitter:card" content="summary_large_image"/><meta name="twitter:title" content="金玉良炎：AI 公衛資料分析工作坊"/><meta name="twitter:description" content="把公衛判斷流程寫成 Python。"/><meta name="twitter:image" content="https://jinyuliang-workshop.allenphant11.chatgpt.site/og.png"/><link rel="shortcut icon" href="https://jinyuliang-workshop.allenphant11.chatgpt.site/favicon.svg"/><link rel="icon" href="https://jinyuliang-workshop.allenphant11.chatgpt.site/favicon.svg"/><script>self.__VINEXT_RSC_PARAMS__={}</script><script>self.__VINEXT_RSC_NAV__={"pathname":"/","searchParams":[]}</script><link rel="modulepreload" href="./assets/index-Cal9Q6Va.js" />
+</head><body><main><aside class="floating-section-nav" aria-label="主章快速跳轉"><a href="#top" class="active" aria-current="location" aria-label="S0 封面與任務"><i aria-hidden="true"></i><span>S0<!-- --> · <!-- -->封面與任務</span></a><a href="#incident" class="" aria-label="S1 事件通報時間線"><i aria-hidden="true"></i><span>S1<!-- --> · <!-- -->事件通報時間線</span></a><a href="#investigation" class="" aria-label="A0–A7 分析實作"><i aria-hidden="true"></i><span>A0–A7<!-- --> · <!-- -->分析實作</span></a><a href="#report" class="" aria-label="S3 成果報告"><i aria-hidden="true"></i><span>S3<!-- --> · <!-- -->成果報告</span></a><a href="#conclusion" class="" aria-label="S4 結案與後續追蹤"><i aria-hidden="true"></i><span>S4<!-- --> · <!-- -->結案與後續追蹤</span></a></aside><header class="site-header"><a class="brand" href="#top" aria-label="回到頁首"><span class="brand-seal" aria-hidden="true">金</span><span><strong>金玉良炎</strong><small>AI 公衛資料分析工作坊</small></span></a><nav aria-label="主要導覽"><a href="#incident">事件通報</a><a href="#investigation">A0–A7 分析</a><a href="#report">成果報告</a></nav></header><section class="hero story-hero" id="top"><div class="palace-rule" aria-hidden="true"><span></span><i></i><span></span></div><div class="hero-copy"><div class="section-code hero-section-code">S0 · 封面與任務</div><p class="eyebrow"><span></span> 承熙十七年・千秋宴翌晨</p><div class="status-ribbon">目前階段　疑似群聚啟動判定・等待多源證據</div><h1>七封急報，<br/>開啟一場<span>群聚調查</span>。</h1><p class="hero-lead">金玉良炎早已載入承熙國的疫防醫典，得名於早年第一位留下疾病紀錄的金玉良。 如今千秋宴後出現相似通報，你帶領一支現代團隊穿越而來，依既有手冊判斷是否啟動群聚調查。</p><blockquote class="opening-dispatch"><b>你的任務</b><p>依疾病手冊判定啟動條件，逐步建立名冊、病例、暴露與檢驗證據，再請 Gemini 把每項分析規格寫成可解釋、可檢查的 Python。</p></blockquote><div class="hero-actions"><a class="button primary" href="#incident">進入事件通報階段</a></div><p class="fiction-note">疾病、病原、檢驗、人物、國家、場所與事件均為本課程原創的虛構合成設定。</p></div><aside class="case-file urgent-file" aria-label="太醫院第一批通報摘要"><div class="case-file-top"><span>太醫院・疫報司</span><span>辰字第七號</span></div><div class="case-mark" aria-hidden="true">疑</div><p class="dispatch-copy">「三宮苑赴宴者陸續嘔吐、腹瀉，五人自述同赴千秋宴。請依金玉良炎通報條件逐筆查驗，判定是否啟動群聚調查。」</p><dl><div><dt>初始通報</dt><dd>7 份</dd></div><div><dt>提及千秋宴</dt><dd>5 人</dd></div><div><dt>下一份資料</dt><dd>宴會完整名冊</dd></div></dl><div class="case-file-foot">通報門檻啟動調查・多源證據確認病因</div></aside></section><section class="incident-section" id="incident"><div class="section-heading narrative-heading"><div class="section-code">S1 · 事件通報時間線</div><p class="eyebrow"><span></span> 宮中疫報紀事</p><h2>先有異常訊號，才有調查資料</h2><p>這條時間線呈現資料如何隨調查行動逐步形成，學員會依序取得每一階段真正需要的案卷。</p></div><div class="incident-timeline"><article><div class="timeline-marker"><span>01</span></div><div class="timeline-time"><time>宴日 12:00</time><small>可能暴露</small></div><div class="timeline-copy"><h3>千秋宴在三處宮苑開席</h3><p>昭華殿、蘅芳苑與承月臺共用部分菜單，也各有不同供餐批次。這個時間點成為後續計算潛伏期的共同參考。</p></div></article><article><div class="timeline-marker"><span>02</span></div><div class="timeline-time"><time>翌日 05:40</time><small>第一份通報</small></div><div class="timeline-copy"><h3>金玉良的急報送進疫報司</h3><p>她提供本案第一個通報訊號；調查小組將用完整發病時間與訪談資料重建病例順序。</p></div></article><article><div class="timeline-marker"><span>03</span></div><div class="timeline-time"><time>翌日 06:25</time><small>異常訊號</small></div><div class="timeline-copy"><h3>短時間內累積七份相似通報</h3><p>七人有嘔吐或腹瀉，其中五人提到曾參加千秋宴。這批零散敘述將用於群聚啟動判定。</p></div></article><article><div class="timeline-marker"><span>04</span></div><div class="timeline-time"><time>翌日 06:40</time><small>依規判定</small></div><div class="timeline-copy"><h3>調查小組翻開既有疾病手冊</h3><p>金玉良炎是承熙國已知疾病，手冊提供通報條件、採檢時機、病例定義與群聚啟動門檻；調查資料用來判定本次事件。</p></div></article><article><div class="timeline-marker"><span>05</span></div><div class="timeline-time"><time>翌日 07:00</time><small>啟動調查</small></div><div class="timeline-copy"><h3>達到疑似群聚門檻，調查正式啟動</h3><p>事件登錄為疑似金玉良炎群聚。團隊立即保留檢體與剩餘食品，同時向主辦單位索取名冊、菜單與供餐紀錄。</p></div></article><article><div class="timeline-marker"><span>06</span></div><div class="timeline-time"><time>翌日 08:00 起</time><small>資料生成</small></div><div class="timeline-copy"><h3>調查逐步建立可分析資料</h3><p>名冊形成分母，主動訪談形成 line list，早期訪談與菜單形成正式問卷；檢驗與環境調查則在另一條線上同步進行。</p></div></article></div><div class="timeline-question"><span>第一個決策點</span><p>七份通報中只有五人提到千秋宴。這足以啟動金玉良炎群聚調查嗎？</p><a href="#investigation">進入 A0・群聚啟動判定 →</a></div></section><section class="investigation-section" id="investigation" aria-label="A0 至 A7 群聚調查分析實作"><div class="chapter-navigation"><div class="current-stage" aria-live="polite"><span>目前案卷</span><strong>A<!-- -->0<!-- -->／A7</strong><b>啟動調查</b></div><nav class="chapter-rail" aria-label="調查章節"><a class="active" aria-current="step" href="#chapter-0"><b>A<!-- -->0</b><span>啟動調查</span></a><a class="" href="#chapter-1"><b>A<!-- -->1</b><span>建立病例</span></a><a class="" href="#chapter-2"><b>A<!-- -->2</b><span>時間與地點</span></a><a class="" href="#chapter-3"><b>A<!-- -->3</b><span>形成問卷</span></a><a class="" href="#chapter-4"><b>A<!-- -->4</b><span>食品粗分析</span></a><a class="" href="#chapter-5"><b>A<!-- -->5</b><span>調整模型</span></a><a class="" href="#chapter-6"><b>A<!-- -->6</b><span>缺失挑戰</span></a><a class="" href="#chapter-7"><b>A<!-- -->7</b><span>證據整合</span></a></nav></div><article class="story-chapter " id="chapter-0"><header class="chapter-header"><div class="chapter-number"><small>案卷</small><strong>A<!-- -->0</strong></div><div class="chapter-copy"><span class="chapter-time">翌日 06:40・七份急報在案</span><h2>用手冊門檻決定是否啟動調查</h2><p>金玉良炎是承熙國既有通報疾病。調查小組目前持有七份疑似通報與疾病工作手冊，任務是判定是否投入群聚調查資源。</p><blockquote><b>此刻要回答：</b>目前通報是否達到《金玉良炎防治工作手冊》的群聚啟動門檻？</blockquote></div></header><div class="lesson-stack"><section class="cause-panel"><div class="lesson-subhead"><span>A<!-- -->0<!-- -->.1</span><div><b>目前取得的資料與下一步</b><p>先確認資料從哪裡來、為什麼此刻出現，再展開查看實際內容。</p></div></div><div class="current-source-list"><article class="current-source-card"><header><div><span>目前取得</span><h3>最初七份急報整理表</h3></div><code>initial_reports.csv</code></header><div class="source-context-grid"><div><small>從哪裡來</small><p>疫報司把翌晨收到的七份個別急報，依通報時間、症狀與千秋宴關聯整理成表。</p></div><div><small>為什麼此刻取得</small><p>先確認相似症狀是否在 48 小時內集中，並逐筆判斷是否符合手冊的群聚啟動條件。</p></div><div><small>本幕要做的圖／輸出</small><p>通報時間條＋啟動條件判定表</p></div></div><p class="source-unit"><b>一列代表什麼：</b>一列是一份初始通報；共 7 列，因此完整顯示。</p><details class="source-preview"><summary><span>預覽資料內容</span><small>展開</small></summary><div class="source-table-shell"><div class="source-table-note"><span>顯示全部 7 列</span><small>可左右捲動查看完整欄位</small></div><div class="source-table-scroll"><table><thead><tr><th>report_id</th><th>report_time</th><th>vomiting</th><th>diarrhea_24h</th><th>attended_banquet</th><th>clinical_criteria</th></tr></thead><tbody><tr><td>IR001</td><td>05:40</td><td>1</td><td>0</td><td>1</td><td>1</td></tr><tr><td>IR002</td><td>05:48</td><td>0</td><td>4</td><td>1</td><td>1</td></tr><tr><td>IR003</td><td>05:55</td><td>1</td><td>3</td><td>1</td><td>1</td></tr><tr><td>IR004</td><td>06:04</td><td>1</td><td>0</td><td>1</td><td>1</td></tr><tr><td>IR005</td><td>06:12</td><td>0</td><td>5</td><td>1</td><td>1</td></tr><tr><td>IR006</td><td>06:18</td><td>1</td><td>0</td><td>0</td><td>1</td></tr><tr><td>IR007</td><td>06:25</td><td>0</td><td>1</td><td>0</td><td>0</td></tr></tbody></table></div></div></details></article><article class="current-source-card"><header><div><span>目前取得</span><h3>金玉良炎防治工作手冊</h3></div><code>disease_field_manual.md</code></header><div class="source-context-grid"><div><small>從哪裡來</small><p>御醫署在本次千秋宴之前已發布的正式疾病手冊，是承熙國既有公衛知識。</p></div><div><small>為什麼此刻取得</small><p>提供群聚門檻、病例定義、潛伏期、採檢時機與證據判讀規則，讓分析條件在看結果前固定。</p></div><div><small>本幕要做的圖／輸出</small><p>通報時間條＋啟動條件判定表</p></div></div><p class="source-unit"><b>一列代表什麼：</b>Markdown 規則文件；預覽時顯示全文。</p><details class="source-preview"><summary><span>預覽資料內容</span><small>展開</small></summary><p class="source-preview-state">正在讀取資料預覽…</p></details></article></div><blockquote class="analysis-direction"><b>接下來的分析方向</b><p>把手冊的臨床條件與宴會關聯轉成逐筆判定欄位，再將符合人數與群聚門檻比較。</p></blockquote></section><section class="analysis-brief"><div class="lesson-subhead"><span>A0.2</span><div><b>下一步要做的圖與分析</b><p>把資料表、分母、產出與判讀範圍寫成分析規格。</p></div></div><div class="analysis-spec-grid"><article><small>圖表／輸出</small><strong>通報時間條＋啟動條件判定表</strong></article><article><small>資料表</small><strong>initial_reports.csv</strong></article><article><small>分母</small><strong>目前收到的 7 份通報</strong></article><article class="wide"><small>可以回答</small><p>判定每筆通報是否符合疑似條件，並決定是否啟動群聚調查。</p></article><article class="wide next-scope"><small>後續接續</small><p>啟動後索取完整宴會名冊與訪談資料，建立事件分母與病例名單。</p></article></div></section><section class="prompt-sequence"><div class="lesson-subhead"><span>A0.3</span><div><b>推薦 Prompt</b><p>用一般人的方式說明手上的資料與想回答的問題，可直接貼給 Gemini。</p></div></div><div class="prompt-brief-grid"><article><small>現有資料與檔名</small><p>initial_reports.csv：最初七份急報整理表、disease_field_manual.md：金玉良炎防治工作手冊</p></article><article><small>要探討的問題</small><p>目前通報是否達到《金玉良炎防治工作手冊》的群聚啟動門檻？</p></article><article><small>預計圖表</small><p>通報時間條＋啟動條件判定表</p></article><article><small>預期呈現</small><p>逐筆條件判定表、符合人數、手冊門檻與 outbreak_triggered 布林值。</p></article><article class="wide"><small>視覺指示</small><p>米白底、朱砂紅標記符合通報、墨綠標記啟動；標題寫明 48 小時門檻，表格保留逐筆 ID。</p></article></div><div class="prompt-list"><article class="prompt-card"><span>01</span><pre>我是負責這場群聚事件的公衛調查學員，目前還不會自己寫 Python。
+
+【目前取得的調查資料】
+- initial_reports.csv：最初七份急報整理表
+- disease_field_manual.md：金玉良炎防治工作手冊
+
+【這一階段的公衛問題】
+目前通報是否達到《金玉良炎防治工作手冊》的群聚啟動門檻？
+
+【這次想完成的調查工作】
+請先用白話告訴我：每一份急報要符合哪些條件，才算和這場宴會有關的疑似病例。接著幫我把 7 份通報逐筆整理成容易核對的表格。
+
+【希望得到的調查成果】
+逐筆條件判定表、符合人數、手冊門檻與 outbreak_triggered 布林值。
+
+如果需要圖表，可使用：通報時間條＋啟動條件判定表
+畫面希望採用：米白底、朱砂紅標記符合通報、墨綠標記啟動；標題寫明 48 小時門檻，表格保留逐筆 ID。
+
+【如果這一步需要畫圖】
+請使用 Plotly 製作可以互動的圖，並讓右上角可以下載 SVG。請替最後的調查報告保留這張圖；如何命名與保存由你處理，完成後告訴我即可。圖表要寫清楚分析對象與分母，中文字、日期和食品名稱保持可讀，滑鼠移到圖上時能看到這次真正使用的人數、比例或信賴區間。配色沿用米白、墨綠、朱砂紅與金色。
+
+請先閱讀上述資料與欄位說明，用白話告訴我哪些資料能回答這個問題、應使用誰作為分母，以及你準備怎麼做。確認後，再提供一格可直接在 Colab 執行的完整 Python 程式。程式內部的資料名稱與寫法由你安排；請加入繁體中文註解，完成後告訴我建立了哪些分析成果、要檢查哪些數字，以及下一步可以如何沿用。</pre><button aria-label="複製第 1 個 Prompt"><i aria-hidden="true">⧉</i>複製 Prompt</button></article><article class="prompt-card"><span>02</span><pre>我是負責這場群聚事件的公衛調查學員，目前還不會自己寫 Python。
+
+【目前取得的調查資料】
+- initial_reports.csv：最初七份急報整理表
+- disease_field_manual.md：金玉良炎防治工作手冊
+
+【這一階段的公衛問題】
+目前通報是否達到《金玉良炎防治工作手冊》的群聚啟動門檻？
+
+【這次想完成的調查工作】
+請幫我計算目前有幾人同時符合症狀條件和宴會關聯，並把每個人的判定理由保留在表格裡，讓我可以人工檢查。
+
+【希望得到的調查成果】
+逐筆條件判定表、符合人數、手冊門檻與 outbreak_triggered 布林值。
+
+如果需要圖表，可使用：通報時間條＋啟動條件判定表
+畫面希望採用：米白底、朱砂紅標記符合通報、墨綠標記啟動；標題寫明 48 小時門檻，表格保留逐筆 ID。
+
+【如果這一步需要畫圖】
+請使用 Plotly 製作可以互動的圖，並讓右上角可以下載 SVG。請替最後的調查報告保留這張圖；如何命名與保存由你處理，完成後告訴我即可。圖表要寫清楚分析對象與分母，中文字、日期和食品名稱保持可讀，滑鼠移到圖上時能看到這次真正使用的人數、比例或信賴區間。配色沿用米白、墨綠、朱砂紅與金色。
+
+請先閱讀上述資料與欄位說明，用白話告訴我哪些資料能回答這個問題、應使用誰作為分母，以及你準備怎麼做。確認後，再提供一格可直接在 Colab 執行的完整 Python 程式。程式內部的資料名稱與寫法由你安排；請加入繁體中文註解，完成後告訴我建立了哪些分析成果、要檢查哪些數字，以及下一步可以如何沿用。</pre><button aria-label="複製第 2 個 Prompt"><i aria-hidden="true">⧉</i>複製 Prompt</button></article><article class="prompt-card"><span>03</span><pre>我是負責這場群聚事件的公衛調查學員，目前還不會自己寫 Python。
+
+【目前取得的調查資料】
+- initial_reports.csv：最初七份急報整理表
+- disease_field_manual.md：金玉良炎防治工作手冊
+
+【這一階段的公衛問題】
+目前通報是否達到《金玉良炎防治工作手冊》的群聚啟動門檻？
+
+【這次想完成的調查工作】
+請把符合人數和工作手冊的 3 人門檻比較，用一句話告訴我是否啟動調查，再說明這個決定目前能代表什麼。
+
+【希望得到的調查成果】
+逐筆條件判定表、符合人數、手冊門檻與 outbreak_triggered 布林值。
+
+如果需要圖表，可使用：通報時間條＋啟動條件判定表
+畫面希望採用：米白底、朱砂紅標記符合通報、墨綠標記啟動；標題寫明 48 小時門檻，表格保留逐筆 ID。
+
+【如果這一步需要畫圖】
+請使用 Plotly 製作可以互動的圖，並讓右上角可以下載 SVG。請替最後的調查報告保留這張圖；如何命名與保存由你處理，完成後告訴我即可。圖表要寫清楚分析對象與分母，中文字、日期和食品名稱保持可讀，滑鼠移到圖上時能看到這次真正使用的人數、比例或信賴區間。配色沿用米白、墨綠、朱砂紅與金色。
+
+請先閱讀上述資料與欄位說明，用白話告訴我哪些資料能回答這個問題、應使用誰作為分母，以及你準備怎麼做。確認後，再提供一格可直接在 Colab 執行的完整 Python 程式。程式內部的資料名稱與寫法由你安排；請加入繁體中文註解，完成後告訴我建立了哪些分析成果、要檢查哪些數字，以及下一步可以如何沿用。</pre><button aria-label="複製第 3 個 Prompt"><i aria-hidden="true">⧉</i>複製 Prompt</button></article></div></section><div class="reveal-stack"><details class="sealed-panel code"><summary><span>A0.4</span><div><b>講師的示範程式</b><small>完成自己的版本後展開核對；程式含註解並可直接複製到 Google Colab。</small></div><i aria-hidden="true">開封</i></summary><div class="sealed-content"><div class="code-sample"><div class="code-toolbar"><span><i aria-hidden="true">⌘</i> Python · Google Colab</span><button aria-label="複製 Python 程式"><i aria-hidden="true">⧉</i>複製程式</button></div><pre class="code-block"><code># 0.4｜讀取初始通報，將手冊門檻轉成可稽核欄位
+import pandas as pd
+
+MANUAL_CLUSTER_THRESHOLD = 3
+reports = pd.read_csv(&quot;initial_reports.csv&quot;, parse_dates=[&quot;onset_datetime&quot;])
+
+# 臨床條件與宴會關聯分開判定，方便逐筆核對
+reports[&quot;meets_clinical_criteria&quot;] = (
+    reports[&quot;vomiting&quot;].eq(1) | reports[&quot;diarrhea_24h_count&quot;].ge(3)
+)
+reports[&quot;has_event_link&quot;] = reports[&quot;attended_banquet&quot;].eq(1)
+reports[&quot;suspected_report&quot;] = (
+    reports[&quot;meets_clinical_criteria&quot;] &amp; reports[&quot;has_event_link&quot;]
+)
+n_linked = int(reports[&quot;suspected_report&quot;].sum())
+outbreak_triggered = n_linked &gt;= MANUAL_CLUSTER_THRESHOLD
+print(reports[[&quot;person_id&quot;, &quot;meets_clinical_criteria&quot;, &quot;has_event_link&quot;, &quot;suspected_report&quot;]])
+print({&quot;linked_reports&quot;: n_linked, &quot;outbreak_triggered&quot;: outbreak_triggered})</code></pre></div></div></details><details class="sealed-panel demo"><summary><span>A0.5</span><div><b>講師的示範</b><small>核對講師產生的圖、表、分母與判讀檢查點。</small></div><i aria-hidden="true">開封</i></summary><div class="sealed-content"><div class="trigger-demo"><div class="trigger-counts"><div><span>收到通報</span><b>7</b></div><div><span>符合臨床條件</span><b>6</b></div><div><span>具宴會關聯</span><b>5</b></div></div><div class="trigger-rule"><span>手冊門檻：同一活動 48 小時內至少 3 名具關聯疑似病例</span><strong>5 ≥ 3　啟動調查</strong></div><p class="validation-note"><b>講師判讀：</b>已達啟動門檻，事件登錄為「疑似金玉良炎群聚」；下一階段以名冊、檢驗與暴露資料確認疾病與媒介。</p></div></div></details></div></div><div class="chapter-transition"><span>下一階段</span><p>門檻判定完成後，調查小組索取完整名冊並展開第一輪訪談，建立事件分母與病例分類。</p><strong>進入「<!-- -->建立病例<!-- -->」</strong></div></article><article class="story-chapter alternate" id="chapter-1"><header class="chapter-header"><div class="chapter-number"><small>案卷</small><strong>A<!-- -->1</strong></div><div class="chapter-copy"><span class="chapter-time">翌日 08:00・第一批固定資料送達</span><h2>先核對資料與分母，再依手冊建立病例</h2><p>主辦單位交出 312 人名冊、3,120 列食品暴露、180 列菜單與 67 列資料字典。學員先確認每張表的分析單位、主鍵與列數，再處理完整回覆、資訊不足與宴前發病，建立可稽核的病例分類。</p><blockquote><b>此刻要回答：</b>固定資料是否完整連接？312 名參與者中，誰符合主要病例定義，哪些人仍無法分類？</blockquote></div></header><div class="lesson-stack"><section class="cause-panel"><div class="lesson-subhead"><span>A<!-- -->1<!-- -->.1</span><div><b>目前取得的資料與下一步</b><p>先確認資料從哪裡來、為什麼此刻出現，再展開查看實際內容。</p></div></div><div class="current-source-list"><article class="current-source-card"><header><div><span>目前取得</span><h3>個人層級 Line List</h3></div><code>person_line_list.csv</code></header><div class="source-context-grid"><div><small>從哪裡來</small><p>主辦單位的 312 人與會名冊，與調查人員第一輪主動訪談、症狀時間及採檢狀態合併而成。</p></div><div><small>為什麼此刻取得</small><p>建立完整事件分母，並讓每名參與者都能依同一套規則分類病例及描述 Person／Time／Place。</p></div><div><small>本幕要做的圖／輸出</small><p>資料盤點表＋病例分類流程圖＋定義敏感度長條圖</p></div></div><p class="source-unit"><b>一列代表什麼：</b>一列是一名參與者；共 312 列，預覽前 10 列。</p><details class="source-preview"><summary><span>預覽資料內容</span><small>展開</small></summary><p class="source-preview-state">正在讀取資料預覽…</p></details></article><article class="current-source-card"><header><div><span>目前取得</span><h3>正式食品暴露問卷長表</h3></div><code>food_exposure.csv</code></header><div class="source-context-grid"><div><small>從哪裡來</small><p>依早期訪談與菜單設計標準問卷，再以參與者訪談和可用供餐紀錄完成。</p></div><div><small>為什麼此刻取得</small><p>為每項食品建立食用／未食用／未知紀錄，才能計算食品別侵襲率、2×2 表、OR 與共食關係。</p></div><div><small>本幕要做的圖／輸出</small><p>資料盤點表＋病例分類流程圖＋定義敏感度長條圖</p></div></div><p class="source-unit"><b>一列代表什麼：</b>一列是一名參與者×一項食品；共 3,120 列，預覽前 10 列。</p><details class="source-preview"><summary><span>預覽資料內容</span><small>展開</small></summary><p class="source-preview-state">正在讀取資料預覽…</p></details></article><article class="current-source-card"><header><div><span>目前取得</span><h3>三場地菜單與供餐批次</h3></div><code>menu_by_site.csv</code></header><div class="source-context-grid"><div><small>從哪裡來</small><p>千秋宴主辦單位與尚膳署提供的場地菜單、餐套、供餐批次及實際上菜時間。</p></div><div><small>為什麼此刻取得</small><p>確認早期病例提到的食品是否真的在其場地供應，並辨識共享食品、場地限定食品與批次結構。</p></div><div><small>本幕要做的圖／輸出</small><p>資料盤點表＋病例分類流程圖＋定義敏感度長條圖</p></div></div><p class="source-unit"><b>一列代表什麼：</b>一列是一個場地×梯次×餐套×食品組合；共 180 列，完整顯示。</p><details class="source-preview"><summary><span>預覽資料內容</span><small>展開</small></summary><p class="source-preview-state">正在讀取資料預覽…</p></details></article><article class="current-source-card"><header><div><span>目前取得</span><h3>資料字典</h3></div><code>data_dictionary.csv</code></header><div class="source-context-grid"><div><small>從哪裡來</small><p>資料管理人員隨調查資料提供的欄位規格，記錄型別、允許值、缺失規則與繁體中文說明。</p></div><div><small>為什麼此刻取得</small><p>在請 AI 寫程式前先核對欄位意義，避免把代碼、空白或資料單位解讀錯誤。</p></div><div><small>本幕要做的圖／輸出</small><p>資料盤點表＋病例分類流程圖＋定義敏感度長條圖</p></div></div><p class="source-unit"><b>一列代表什麼：</b>一列是一個欄位定義；共 67 列，完整顯示。</p><details class="source-preview"><summary><span>預覽資料內容</span><small>展開</small></summary><p class="source-preview-state">正在讀取資料預覽…</p></details></article><article class="current-source-card"><header><div><span>目前取得</span><h3>金玉良炎防治工作手冊</h3></div><code>disease_field_manual.md</code></header><div class="source-context-grid"><div><small>從哪裡來</small><p>御醫署在本次千秋宴之前已發布的正式疾病手冊，是承熙國既有公衛知識。</p></div><div><small>為什麼此刻取得</small><p>提供群聚門檻、病例定義、潛伏期、採檢時機與證據判讀規則，讓分析條件在看結果前固定。</p></div><div><small>本幕要做的圖／輸出</small><p>資料盤點表＋病例分類流程圖＋定義敏感度長條圖</p></div></div><p class="source-unit"><b>一列代表什麼：</b>Markdown 規則文件；預覽時顯示全文。</p><details class="source-preview"><summary><span>預覽資料內容</span><small>展開</small></summary><p class="source-preview-state">正在讀取資料預覽…</p></details></article></div><blockquote class="analysis-direction"><b>接下來的分析方向</b><p>先盤點四張 Release 1 資料表與分析單位，再固定臨床門檻和發病時間窗，把每名參與者分類並保留 unknown。</p></blockquote></section><section class="analysis-brief"><div class="lesson-subhead"><span>A1.2</span><div><b>下一步要做的圖與分析</b><p>把資料表、分母、產出與判讀範圍寫成分析規格。</p></div></div><div class="analysis-spec-grid"><article><small>圖表／輸出</small><strong>資料盤點表＋病例分類流程圖＋定義敏感度長條圖</strong></article><article><small>資料表</small><strong>person_line_list.csv、food_exposure.csv、menu_by_site.csv、data_dictionary.csv</strong></article><article><small>分母</small><strong>名冊 312 人；病例主要分析為可分類者 278 人，另列 34 名 unknown</strong></article><article class="wide"><small>可以回答</small><p>確認固定資料列數與關聯，估計主要病例數，並觀察病例定義參數改變帶來的病例數差異。</p></article><article class="wide next-scope"><small>後續接續</small><p>完成病例名單後，以 symptom_onset_datetime、role_group 與 site_id 描述人、時、地分布。</p></article></div></section><section class="prompt-sequence"><div class="lesson-subhead"><span>A1.3</span><div><b>推薦 Prompt</b><p>用一般人的方式說明手上的資料與想回答的問題，可直接貼給 Gemini。</p></div></div><div class="prompt-brief-grid"><article><small>現有資料與檔名</small><p>person_line_list.csv：個人層級 Line List、food_exposure.csv：正式食品暴露問卷長表、menu_by_site.csv：三場地菜單與供餐批次、data_dictionary.csv：資料字典、disease_field_manual.md：金玉良炎防治工作手冊</p></article><article><small>要探討的問題</small><p>固定資料是否完整連接？312 名參與者中，誰符合主要病例定義，哪些人仍無法分類？</p></article><article><small>預計圖表</small><p>資料盤點表＋病例分類流程圖＋定義敏感度長條圖</p></article><article><small>預期呈現</small><p>資料盤點、各病例分類人數、unknown 人數，以及主要 77／278、敏感 92／278、嚴格 63／278 的結果。</p></article><article class="wide"><small>視覺指示</small><p>資料盤點先列每表列數；三種病例定義使用同一座標軸，標題同時標示病例數、可分類分母與時間窗。</p></article></div><div class="prompt-list"><article class="prompt-card"><span>01</span><pre>我是負責這場群聚事件的公衛調查學員，目前還不會自己寫 Python。
+
+【目前取得的調查資料】
+- person_line_list.csv：個人層級 Line List
+- food_exposure.csv：正式食品暴露問卷長表
+- menu_by_site.csv：三場地菜單與供餐批次
+- data_dictionary.csv：資料字典
+- disease_field_manual.md：金玉良炎防治工作手冊
+
+【這一階段的公衛問題】
+固定資料是否完整連接？312 名參與者中，誰符合主要病例定義，哪些人仍無法分類？
+
+【這次想完成的調查工作】
+請先用白話說明：完整名冊、症狀、發病時間和缺失資料在病例判定中各扮演什麼角色，並告訴我這一幕真正的分母是誰。
+
+【希望得到的調查成果】
+資料盤點、各病例分類人數、unknown 人數，以及主要 77／278、敏感 92／278、嚴格 63／278 的結果。
+
+如果需要圖表，可使用：資料盤點表＋病例分類流程圖＋定義敏感度長條圖
+畫面希望採用：資料盤點先列每表列數；三種病例定義使用同一座標軸，標題同時標示病例數、可分類分母與時間窗。
+
+【如果這一步需要畫圖】
+請使用 Plotly 製作可以互動的圖，並讓右上角可以下載 SVG。請替最後的調查報告保留這張圖；如何命名與保存由你處理，完成後告訴我即可。圖表要寫清楚分析對象與分母，中文字、日期和食品名稱保持可讀，滑鼠移到圖上時能看到這次真正使用的人數、比例或信賴區間。配色沿用米白、墨綠、朱砂紅與金色。
+
+請先閱讀上述資料與欄位說明，用白話告訴我哪些資料能回答這個問題、應使用誰作為分母，以及你準備怎麼做。確認後，再提供一格可直接在 Colab 執行的完整 Python 程式。程式內部的資料名稱與寫法由你安排；請加入繁體中文註解，完成後告訴我建立了哪些分析成果、要檢查哪些數字，以及下一步可以如何沿用。</pre><button aria-label="複製第 1 個 Prompt"><i aria-hidden="true">⧉</i>複製 Prompt</button></article><article class="prompt-card"><span>02</span><pre>我是負責這場群聚事件的公衛調查學員，目前還不會自己寫 Python。
+
+【目前取得的調查資料】
+- person_line_list.csv：個人層級 Line List
+- food_exposure.csv：正式食品暴露問卷長表
+- menu_by_site.csv：三場地菜單與供餐批次
+- data_dictionary.csv：資料字典
+- disease_field_manual.md：金玉良炎防治工作手冊
+
+【這一階段的公衛問題】
+固定資料是否完整連接？312 名參與者中，誰符合主要病例定義，哪些人仍無法分類？
+
+【這次想完成的調查工作】
+請依照工作手冊，逐一判斷每位參與者是否符合主要病例定義。也請把時間窗做成之後可以修改的設定，讓我能比較較寬或較嚴格的定義。
+
+【希望得到的調查成果】
+資料盤點、各病例分類人數、unknown 人數，以及主要 77／278、敏感 92／278、嚴格 63／278 的結果。
+
+如果需要圖表，可使用：資料盤點表＋病例分類流程圖＋定義敏感度長條圖
+畫面希望採用：資料盤點先列每表列數；三種病例定義使用同一座標軸，標題同時標示病例數、可分類分母與時間窗。
+
+【如果這一步需要畫圖】
+請使用 Plotly 製作可以互動的圖，並讓右上角可以下載 SVG。請替最後的調查報告保留這張圖；如何命名與保存由你處理，完成後告訴我即可。圖表要寫清楚分析對象與分母，中文字、日期和食品名稱保持可讀，滑鼠移到圖上時能看到這次真正使用的人數、比例或信賴區間。配色沿用米白、墨綠、朱砂紅與金色。
+
+請先閱讀上述資料與欄位說明，用白話告訴我哪些資料能回答這個問題、應使用誰作為分母，以及你準備怎麼做。確認後，再提供一格可直接在 Colab 執行的完整 Python 程式。程式內部的資料名稱與寫法由你安排；請加入繁體中文註解，完成後告訴我建立了哪些分析成果、要檢查哪些數字，以及下一步可以如何沿用。</pre><button aria-label="複製第 2 個 Prompt"><i aria-hidden="true">⧉</i>複製 Prompt</button></article><article class="prompt-card"><span>03</span><pre>我是負責這場群聚事件的公衛調查學員，目前還不會自己寫 Python。
+
+【目前取得的調查資料】
+- person_line_list.csv：個人層級 Line List
+- food_exposure.csv：正式食品暴露問卷長表
+- menu_by_site.csv：三場地菜單與供餐批次
+- data_dictionary.csv：資料字典
+- disease_field_manual.md：金玉良炎防治工作手冊
+
+【這一階段的公衛問題】
+固定資料是否完整連接？312 名參與者中，誰符合主要病例定義，哪些人仍無法分類？
+
+【這次想完成的調查工作】
+請把主要病例、排除者和資料不足者分開計數。資料不足者請保留為未知，並告訴我應該抽查哪幾列來確認 AI 沒有誤判。
+
+【希望得到的調查成果】
+資料盤點、各病例分類人數、unknown 人數，以及主要 77／278、敏感 92／278、嚴格 63／278 的結果。
+
+如果需要圖表，可使用：資料盤點表＋病例分類流程圖＋定義敏感度長條圖
+畫面希望採用：資料盤點先列每表列數；三種病例定義使用同一座標軸，標題同時標示病例數、可分類分母與時間窗。
+
+【如果這一步需要畫圖】
+請使用 Plotly 製作可以互動的圖，並讓右上角可以下載 SVG。請替最後的調查報告保留這張圖；如何命名與保存由你處理，完成後告訴我即可。圖表要寫清楚分析對象與分母，中文字、日期和食品名稱保持可讀，滑鼠移到圖上時能看到這次真正使用的人數、比例或信賴區間。配色沿用米白、墨綠、朱砂紅與金色。
+
+請先閱讀上述資料與欄位說明，用白話告訴我哪些資料能回答這個問題、應使用誰作為分母，以及你準備怎麼做。確認後，再提供一格可直接在 Colab 執行的完整 Python 程式。程式內部的資料名稱與寫法由你安排；請加入繁體中文註解，完成後告訴我建立了哪些分析成果、要檢查哪些數字，以及下一步可以如何沿用。</pre><button aria-label="複製第 3 個 Prompt"><i aria-hidden="true">⧉</i>複製 Prompt</button></article></div></section><div class="reveal-stack"><details class="sealed-panel code"><summary><span>A1.4</span><div><b>講師的示範程式</b><small>完成自己的版本後展開核對；程式含註解並可直接複製到 Google Colab。</small></div><i aria-hidden="true">開封</i></summary><div class="sealed-content"><div class="code-sample"><div class="code-toolbar"><span><i aria-hidden="true">⌘</i> Python · Google Colab</span><button aria-label="複製 Python 程式"><i aria-hidden="true">⧉</i>複製程式</button></div><pre class="code-block"><code># A1.4｜先盤點固定資料，再依工作手冊建立主要病例分類
+import pandas as pd
+
+line_list = pd.read_csv(
+    &quot;person_line_list.csv&quot;,
+    parse_dates=[&quot;meal_end_datetime&quot;, &quot;symptom_onset_datetime&quot;]
+)
+food_exposure = pd.read_csv(&quot;food_exposure.csv&quot;)
+menu = pd.read_csv(&quot;menu_by_site.csv&quot;)
+dictionary = pd.read_csv(&quot;data_dictionary.csv&quot;)
+
+# 最終講師版固定的四張 Release 1 資料表；先確認列數與分析單位
+inventory = pd.DataFrame([
+    {&quot;table&quot;: &quot;people&quot;, &quot;rows&quot;: len(line_list), &quot;columns&quot;: line_list.shape[1]},
+    {&quot;table&quot;: &quot;exposures&quot;, &quot;rows&quot;: len(food_exposure), &quot;columns&quot;: food_exposure.shape[1]},
+    {&quot;table&quot;: &quot;menu&quot;, &quot;rows&quot;: len(menu), &quot;columns&quot;: menu.shape[1]},
+    {&quot;table&quot;: &quot;dictionary&quot;, &quot;rows&quot;: len(dictionary), &quot;columns&quot;: dictionary.shape[1]},
+])
+print(inventory)
+
+def classify_primary(df, onset_min=4, onset_max=36):
+    result = pd.Series(pd.NA, index=df.index, dtype=&quot;boolean&quot;)
+    responded = df[&quot;survey_response&quot;].eq(1)
+
+    # 已回覆者的個別空白症狀按未報告該症狀處理；整份未回覆者維持 NA
+    major_count = df[[&quot;nausea&quot;, &quot;vomiting&quot;, &quot;diarrhea&quot;, &quot;abdominal_cramps&quot;]].fillna(0).sum(axis=1)
+    clinical = (
+        major_count.ge(2)
+        | df[&quot;vomiting_count_24h&quot;].fillna(0).ge(2)
+        | df[&quot;loose_stool_count_24h&quot;].fillna(0).ge(3)
+    )
+    hours_after_meal = (
+        df[&quot;symptom_onset_datetime&quot;] - df[&quot;meal_end_datetime&quot;]
+    ).dt.total_seconds() / 3600
+
+    result.loc[responded] = (
+        clinical.loc[responded]
+        &amp; hours_after_meal.loc[responded].between(onset_min, onset_max).fillna(False)
+    )
+    return result, hours_after_meal
+
+line_list[&quot;primary&quot;], line_list[&quot;hours_after_meal&quot;] = classify_primary(line_list)
+print(line_list[&quot;primary&quot;].value_counts(dropna=False))</code></pre></div></div></details><details class="sealed-panel demo"><summary><span>A1.5</span><div><b>講師的示範</b><small>核對講師產生的圖、表、分母與判讀檢查點。</small></div><i aria-hidden="true">開封</i></summary><div class="sealed-content"><section class="lab-panel"><div class="lab-panel-heading"><div><span class="lab-kicker">講師示範</span><h3>病例定義參數化</h3></div><span class="denominator-chip">可分類者 n = <!-- -->278</span></div><div class="segmented" role="group" aria-label="病例定義"><button class="selected">主要定義</button><button class="">敏感定義</button><button class="">嚴格定義</button></div><div class="case-result"><div class="case-metric"><strong>77</strong><span>病例數</span></div><div class="case-metric"><strong>27.7%</strong><span>病例比例</span></div><div class="case-definition-copy"><b>餐後 4–36 小時</b><p>四項主要腸胃症狀至少兩項，或嘔吐 ≥2 次，或稀便 ≥3 次</p></div></div><p class="validation-note"><b>檢查點：</b>切換定義時分母維持 278；資訊不足者保留為 NA，並在結果中另列人數。</p></section></div></details></div></div><div class="chapter-transition"><span>下一階段</span><p>資料與病例名單固定後，下一卷把 77 名主要病例放回角色、時間與三處宮苑。</p><strong>進入「<!-- -->Person／Time／Place<!-- -->」</strong></div></article><article class="story-chapter " id="chapter-2"><header class="chapter-header"><div class="chapter-number"><small>案卷</small><strong>A<!-- -->2</strong></div><div class="chapter-copy"><span class="chapter-time">翌日 08:40・77 名主要病例定位完成</span><h2>以 Person／Time／Place 描述群聚</h2><p>主要病例名單已固定。太醫院需要同時理解哪些角色發病、何時形成波峰、三處宮苑的疾病負擔，以及餐後潛伏期是否符合手冊。</p><blockquote><b>此刻要回答：</b>人、時、地分布是否與單次共同來源暴露相容？</blockquote></div></header><div class="lesson-stack"><section class="cause-panel"><div class="lesson-subhead"><span>A<!-- -->2<!-- -->.1</span><div><b>目前取得的資料與下一步</b><p>先確認資料從哪裡來、為什麼此刻出現，再展開查看實際內容。</p></div></div><div class="current-source-list"><article class="current-source-card"><header><div><span>目前取得</span><h3>個人層級 Line List</h3></div><code>person_line_list.csv</code></header><div class="source-context-grid"><div><small>從哪裡來</small><p>主辦單位的 312 人與會名冊，與調查人員第一輪主動訪談、症狀時間及採檢狀態合併而成。</p></div><div><small>為什麼此刻取得</small><p>建立完整事件分母，並讓每名參與者都能依同一套規則分類病例及描述 Person／Time／Place。</p></div><div><small>本幕要做的圖／輸出</small><p>角色別侵襲率＋可切換 1／2／4／6 小時分箱的 Plotly 流行曲線＋潛伏期摘要＋場地別侵襲率</p></div></div><p class="source-unit"><b>一列代表什麼：</b>一列是一名參與者；共 312 列，預覽前 10 列。</p><details class="source-preview"><summary><span>預覽資料內容</span><small>展開</small></summary><p class="source-preview-state">正在讀取資料預覽…</p></details></article><article class="current-source-card"><header><div><span>目前取得</span><h3>A1 病例分類輸出</h3></div><code>case_classification_summary</code></header><div class="source-context-grid"><div><small>從哪裡來</small><p>A1 依 line list 與疾病工作手冊建立病例名單後產生。</p></div><div><small>為什麼此刻取得</small><p>固定本輪主要病例集合，讓後續流行曲線、侵襲率與食品分析使用同一個 outcome。</p></div><div><small>本幕要做的圖／輸出</small><p>角色別侵襲率＋可切換 1／2／4／6 小時分箱的 Plotly 流行曲線＋潛伏期摘要＋場地別侵襲率</p></div></div><p class="source-unit"><b>一列代表什麼：</b>分析衍生表；完整顯示三種定義結果。</p><details class="source-preview"><summary><span>預覽資料內容</span><small>展開</small></summary><div class="source-table-shell"><div class="source-table-note"><span>顯示全部 3 列</span><small>可左右捲動查看完整欄位</small></div><div class="source-table-scroll"><table><thead><tr><th>definition</th><th>cases</th><th>classifiable_n</th><th>rate</th></tr></thead><tbody><tr><td>primary</td><td>77</td><td>278</td><td>27.7%</td></tr><tr><td>sensitive</td><td>92</td><td>278</td><td>33.1%</td></tr><tr><td>strict</td><td>63</td><td>278</td><td>22.7%</td></tr></tbody></table></div></div></details></article></div><blockquote class="analysis-direction"><b>接下來的分析方向</b><p>用同一批主要病例繪製可切換分箱的流行曲線，並以各群組可分類者計算角色、場地、梯次侵襲率，再摘要餐後潛伏期。</p></blockquote></section><section class="analysis-brief"><div class="lesson-subhead"><span>A2.2</span><div><b>下一步要做的圖與分析</b><p>把資料表、分母、產出與判讀範圍寫成分析規格。</p></div></div><div class="analysis-spec-grid"><article><small>圖表／輸出</small><strong>角色別侵襲率＋可切換 1／2／4／6 小時分箱的 Plotly 流行曲線＋潛伏期摘要＋場地別侵襲率</strong></article><article><small>資料表</small><strong>person_line_list.csv</strong></article><article><small>分母</small><strong>流行曲線與潛伏期採有發病時間的主要病例；分組侵襲率採各組病例狀態可分類者</strong></article><article class="wide"><small>可以回答</small><p>描述病例在人、時、地的分布，檢查時間集中程度與手冊潛伏期相容性，評估共同來源假說。</p></article><article class="wide next-scope"><small>後續接續</small><p>共同來源型態成立後，以早期訪談、菜單與供餐流程建立正式暴露問卷。</p></article></div></section><section class="prompt-sequence"><div class="lesson-subhead"><span>A2.3</span><div><b>推薦 Prompt</b><p>用一般人的方式說明手上的資料與想回答的問題，可直接貼給 Gemini。</p></div></div><div class="prompt-brief-grid"><article><small>現有資料與檔名</small><p>person_line_list.csv：個人層級 Line List、case_classification_summary：A1 病例分類輸出</p></article><article><small>要探討的問題</small><p>人、時、地分布是否與單次共同來源暴露相容？</p></article><article><small>預計圖表</small><p>角色別侵襲率＋可切換 1／2／4／6 小時分箱的 Plotly 流行曲線＋潛伏期摘要＋場地別侵襲率</p></article><article><small>預期呈現</small><p>角色／場地／梯次病例數與分母、單張可切換分箱的互動流行曲線、發病時間缺失數、潛伏期中位數／IQR／範圍與手冊主要區間比例；圖表工具列下載 SVG。</p></article><article class="wide"><small>視覺指示</small><p>Person 使用墨綠水平條；Time 使用朱砂紅直方柱；Place 使用三欄數字卡；每項結果標示病例數與可分類分母。</p></article></div><div class="prompt-list"><article class="prompt-card"><span>01</span><pre>我是負責這場群聚事件的公衛調查學員，目前還不會自己寫 Python。
+
+【目前取得的調查資料】
+- person_line_list.csv：個人層級 Line List
+- case_classification_summary：A1 病例分類輸出
+
+【這一階段的公衛問題】
+人、時、地分布是否與單次共同來源暴露相容？
+
+【這次想完成的調查工作】
+我想知道病例是在什麼時間集中出現。請先告訴我有多少主要病例具有可用的發病時間，再用 Plotly 畫流行曲線。
+
+【希望得到的調查成果】
+角色／場地／梯次病例數與分母、單張可切換分箱的互動流行曲線、發病時間缺失數、潛伏期中位數／IQR／範圍與手冊主要區間比例；圖表工具列下載 SVG。
+
+如果需要圖表，可使用：角色別侵襲率＋可切換 1／2／4／6 小時分箱的 Plotly 流行曲線＋潛伏期摘要＋場地別侵襲率
+畫面希望採用：Person 使用墨綠水平條；Time 使用朱砂紅直方柱；Place 使用三欄數字卡；每項結果標示病例數與可分類分母。
+
+【如果這一步需要畫圖】
+請使用 Plotly 製作可以互動的圖，並讓右上角可以下載 SVG。請替最後的調查報告保留這張圖；如何命名與保存由你處理，完成後告訴我即可。圖表要寫清楚分析對象與分母，中文字、日期和食品名稱保持可讀，滑鼠移到圖上時能看到這次真正使用的人數、比例或信賴區間。配色沿用米白、墨綠、朱砂紅與金色。
+
+請先閱讀上述資料與欄位說明，用白話告訴我哪些資料能回答這個問題、應使用誰作為分母，以及你準備怎麼做。確認後，再提供一格可直接在 Colab 執行的完整 Python 程式。程式內部的資料名稱與寫法由你安排；請加入繁體中文註解，完成後告訴我建立了哪些分析成果、要檢查哪些數字，以及下一步可以如何沿用。</pre><button aria-label="複製第 1 個 Prompt"><i aria-hidden="true">⧉</i>複製 Prompt</button></article><article class="prompt-card"><span>02</span><pre>我是負責這場群聚事件的公衛調查學員，目前還不會自己寫 Python。
+
+【目前取得的調查資料】
+- person_line_list.csv：個人層級 Line List
+- case_classification_summary：A1 病例分類輸出
+
+【這一階段的公衛問題】
+人、時、地分布是否與單次共同來源暴露相容？
+
+【這次想完成的調查工作】
+請讓同一張流行曲線可以切換 1、2、4、6 小時分箱，並替我確認四種畫法使用的是同一批病例。時間文字要清楚，不要擠在一起。
+
+【希望得到的調查成果】
+角色／場地／梯次病例數與分母、單張可切換分箱的互動流行曲線、發病時間缺失數、潛伏期中位數／IQR／範圍與手冊主要區間比例；圖表工具列下載 SVG。
+
+如果需要圖表，可使用：角色別侵襲率＋可切換 1／2／4／6 小時分箱的 Plotly 流行曲線＋潛伏期摘要＋場地別侵襲率
+畫面希望採用：Person 使用墨綠水平條；Time 使用朱砂紅直方柱；Place 使用三欄數字卡；每項結果標示病例數與可分類分母。
+
+【如果這一步需要畫圖】
+請使用 Plotly 製作可以互動的圖，並讓右上角可以下載 SVG。請替最後的調查報告保留這張圖；如何命名與保存由你處理，完成後告訴我即可。圖表要寫清楚分析對象與分母，中文字、日期和食品名稱保持可讀，滑鼠移到圖上時能看到這次真正使用的人數、比例或信賴區間。配色沿用米白、墨綠、朱砂紅與金色。
+
+請先閱讀上述資料與欄位說明，用白話告訴我哪些資料能回答這個問題、應使用誰作為分母，以及你準備怎麼做。確認後，再提供一格可直接在 Colab 執行的完整 Python 程式。程式內部的資料名稱與寫法由你安排；請加入繁體中文註解，完成後告訴我建立了哪些分析成果、要檢查哪些數字，以及下一步可以如何沿用。</pre><button aria-label="複製第 2 個 Prompt"><i aria-hidden="true">⧉</i>複製 Prompt</button></article><article class="prompt-card"><span>03</span><pre>我是負責這場群聚事件的公衛調查學員，目前還不會自己寫 Python。
+
+【目前取得的調查資料】
+- person_line_list.csv：個人層級 Line List
+- case_classification_summary：A1 病例分類輸出
+
+【這一階段的公衛問題】
+人、時、地分布是否與單次共同來源暴露相容？
+
+【這次想完成的調查工作】
+請再比較不同角色、場地和用餐梯次的病例數、可判定人數與侵襲率，並摘要從用餐到發病的時間。最後用白話告訴我 Person、Time、Place 各看到了什麼。
+
+【希望得到的調查成果】
+角色／場地／梯次病例數與分母、單張可切換分箱的互動流行曲線、發病時間缺失數、潛伏期中位數／IQR／範圍與手冊主要區間比例；圖表工具列下載 SVG。
+
+如果需要圖表，可使用：角色別侵襲率＋可切換 1／2／4／6 小時分箱的 Plotly 流行曲線＋潛伏期摘要＋場地別侵襲率
+畫面希望採用：Person 使用墨綠水平條；Time 使用朱砂紅直方柱；Place 使用三欄數字卡；每項結果標示病例數與可分類分母。
+
+【如果這一步需要畫圖】
+請使用 Plotly 製作可以互動的圖，並讓右上角可以下載 SVG。請替最後的調查報告保留這張圖；如何命名與保存由你處理，完成後告訴我即可。圖表要寫清楚分析對象與分母，中文字、日期和食品名稱保持可讀，滑鼠移到圖上時能看到這次真正使用的人數、比例或信賴區間。配色沿用米白、墨綠、朱砂紅與金色。
+
+請先閱讀上述資料與欄位說明，用白話告訴我哪些資料能回答這個問題、應使用誰作為分母，以及你準備怎麼做。確認後，再提供一格可直接在 Colab 執行的完整 Python 程式。程式內部的資料名稱與寫法由你安排；請加入繁體中文註解，完成後告訴我建立了哪些分析成果、要檢查哪些數字，以及下一步可以如何沿用。</pre><button aria-label="複製第 3 個 Prompt"><i aria-hidden="true">⧉</i>複製 Prompt</button></article></div></section><div class="reveal-stack"><details class="sealed-panel code"><summary><span>A2.4</span><div><b>講師的示範程式</b><small>完成自己的版本後展開核對；程式含註解並可直接複製到 Google Colab。</small></div><i aria-hidden="true">開封</i></summary><div class="sealed-content"><div class="code-sample"><div class="code-toolbar"><span><i aria-hidden="true">⌘</i> Python · Google Colab</span><button aria-label="複製 Python 程式"><i aria-hidden="true">⧉</i>複製程式</button></div><pre class="code-block"><code># A2.4｜完成 Person／Time／Place、潛伏期與可切換分箱的 Plotly 流行曲線
+import numpy as np
+import pandas as pd
+import plotly.graph_objects as go
+
+FIGURES = globals().get(&quot;FIGURES&quot;, {})
+
+def svg_config(filename):
+    return {
+        &quot;displaylogo&quot;: False,
+        &quot;responsive&quot;: True,
+        &quot;toImageButtonOptions&quot;: {
+            &quot;format&quot;: &quot;svg&quot;, &quot;filename&quot;: filename,
+            &quot;height&quot;: None, &quot;width&quot;: None, &quot;scale&quot;: 1,
+        },
+    }
+
+if &quot;primary&quot; not in line_list.columns:
+    raise ValueError(&quot;請先執行 A1.4 建立 primary 與 hours_after_meal&quot;)
+
+# Person／Place：各組同時報告病例數、可分類分母與侵襲率
+def attack_rate_summary(data, group):
+    return (
+        data.groupby(group, dropna=False)[&quot;primary&quot;]
+        .agg(classifiable_n=&quot;count&quot;, cases=&quot;sum&quot;)
+        .assign(attack_rate=lambda x: x[&quot;cases&quot;] / x[&quot;classifiable_n&quot;])
+        .reset_index()
+    )
+
+person_summary = attack_rate_summary(line_list, &quot;role_group&quot;)
+place_summary = attack_rate_summary(line_list, &quot;site_id&quot;)
+session_summary = attack_rate_summary(line_list, &quot;meal_session&quot;)
+print(person_summary)
+print(place_summary)
+
+cases = line_list.loc[line_list[&quot;primary&quot;].eq(True)].copy()
+missing_onset = cases[&quot;symptom_onset_datetime&quot;].isna().sum()
+print(f&quot;Cases with missing onset: {missing_onset}&quot;)
+
+# 潛伏期：以個人用餐結束作為共同定義的時間起點
+incubation = cases[&quot;hours_after_meal&quot;].describe(percentiles=[.25, .5, .75, .9])
+within_manual_core = cases[&quot;hours_after_meal&quot;].between(5, 28).mean()
+print(incubation)
+print(f&quot;Within 5–28 hours: {within_manual_core:.1%}&quot;)
+
+def epi_counts(data, bin_hours):
+    onset = data[&quot;symptom_onset_datetime&quot;].dropna()
+    start = onset.min().floor(f&quot;{bin_hours}h&quot;)
+    end = onset.max().ceil(f&quot;{bin_hours}h&quot;)
+    edges = pd.date_range(start, end + pd.Timedelta(hours=bin_hours), freq=f&quot;{bin_hours}h&quot;)
+    counts = pd.cut(onset, bins=edges, right=False).value_counts(sort=False)
+    return pd.DataFrame({
+        &quot;bin_start&quot;: [interval.left for interval in counts.index],
+        &quot;bin_end&quot;: [interval.right for interval in counts.index],
+        &quot;cases&quot;: counts.to_numpy(),
+    })
+
+bin_options = [1, 2, 4, 6]
+epi_tables = {hours: epi_counts(cases, hours) for hours in bin_options}
+assert len({int(table[&quot;cases&quot;].sum()) for table in epi_tables.values()}) == 1
+
+fig = go.Figure()
+for index, hours in enumerate(bin_options):
+    table = epi_tables[hours]
+    fig.add_bar(
+        x=table[&quot;bin_start&quot;], y=table[&quot;cases&quot;],
+        width=hours * 60 * 60 * 1000 * .92,
+        visible=index == 2, marker_color=&quot;#9c4a36&quot;,
+        customdata=np.column_stack([
+            table[&quot;bin_start&quot;].dt.strftime(&quot;%m-%d %H:%M&quot;),
+            table[&quot;bin_end&quot;].dt.strftime(&quot;%m-%d %H:%M&quot;),
+        ]),
+        hovertemplate=&quot;%{customdata[0]}–%{customdata[1]}&lt;br&gt;新發病例：%{y:.0f}&lt;extra&gt;&lt;/extra&gt;&quot;,
+        name=f&quot;{hours} 小時&quot;,
+    )
+
+fig.update_layout(
+    title=&quot;主要病例流行曲線｜4 小時分箱&quot;,
+    template=&quot;plotly_white&quot;, paper_bgcolor=&quot;#fbf7ee&quot;, font_family=&quot;Noto Sans TC, Microsoft JhengHei, sans-serif&quot;,
+    xaxis={&quot;title&quot;: &quot;發病日期時間&quot;, &quot;tickformat&quot;: &quot;%m-%d&lt;br&gt;%H:%M&quot;, &quot;nticks&quot;: 9},
+    yaxis={&quot;title&quot;: &quot;新發病例數&quot;, &quot;rangemode&quot;: &quot;tozero&quot;},
+    updatemenus=[{&quot;buttons&quot;: [
+        {&quot;label&quot;: f&quot;{hours} 小時&quot;, &quot;method&quot;: &quot;update&quot;, &quot;args&quot;: [
+            {&quot;visible&quot;: [position == index for position in range(4)]},
+            {&quot;title.text&quot;: f&quot;主要病例流行曲線｜{hours} 小時分箱&quot;},
+        ]} for index, hours in enumerate(bin_options)]}],
+)
+FIGURES[&quot;epi_curve&quot;] = fig
+fig.show(config=svg_config(&quot;epi_curve&quot;))</code></pre></div></div></details><details class="sealed-panel demo"><summary><span>A2.5</span><div><b>講師的示範</b><small>核對講師產生的圖、表、分母與判讀檢查點。</small></div><i aria-hidden="true">開封</i></summary><div class="sealed-content"><div><section class="lab-panel"><div class="lab-panel-heading"><div><span class="lab-kicker">講師示範</span><h3>流行曲線分箱</h3></div><span class="denominator-chip">柱高合計：<!-- -->77<!-- --> 例</span></div><div class="bin-controls" role="group" aria-label="分箱寬度"><button class="">2<!-- --> 小時</button><button class="selected">4<!-- --> 小時</button><button class="">6<!-- --> 小時</button></div><div class="epi-chart" role="img" aria-label="4 小時分箱流行曲線，共 77 例"><div class="epi-bar-wrap"><span class="epi-value">7</span><div class="epi-bar" style="height:21.875%"></div><time>09/16
+16:00</time></div><div class="epi-bar-wrap"><span class="epi-value">32</span><div class="epi-bar" style="height:100%"></div><time>09/16
+20:00</time></div><div class="epi-bar-wrap"><span class="epi-value">19</span><div class="epi-bar" style="height:59.375%"></div><time>09/17
+00:00</time></div><div class="epi-bar-wrap"><span class="epi-value">9</span><div class="epi-bar" style="height:28.125%"></div><time>09/17
+04:00</time></div><div class="epi-bar-wrap"><span class="epi-value">7</span><div class="epi-bar" style="height:21.875%"></div><time>09/17
+08:00</time></div><div class="epi-bar-wrap"><span class="epi-value">1</span><div class="epi-bar" style="height:3.125%"></div><time>09/17
+12:00</time></div><div class="epi-bar-wrap"><span class="epi-value">2</span><div class="epi-bar" style="height:6.25%"></div><time>09/17
+16:00</time></div><div class="epi-bar-wrap"><span class="epi-value"></span><div class="epi-bar" style="height:2%"></div><time>09/17
+20:00</time></div></div></section><div class="place-evidence"><div><span>Place｜昭華殿</span><b>24 / 93</b><small>25.8%</small></div><div><span>Place｜蘅芳苑</span><b>27 / 86</b><small>31.4%</small></div><div><span>Place｜承月臺</span><b>26 / 99</b><small>26.3%</small></div><p>三處皆有病例，支持共享暴露假說；場地差異將納入後續分層與調整分析。</p></div><div class="person-time-place-grid"><section class="person-summary-card"><div><span class="lab-kicker">PERSON</span><h3>角色別侵襲率</h3></div><div class="role-bars"><div><span>內廷賓客</span><i><b style="width:86.75%"></b></i><strong>17<!-- -->/<!-- -->49<!-- -->・<!-- -->34.7<!-- -->%</strong></div><div><span>膳勤人員</span><i><b style="width:90.99999999999999%"></b></i><strong>12<!-- -->/<!-- -->33<!-- -->・<!-- -->36.4<!-- -->%</strong></div><div><span>宮廷侍從</span><i><b style="width:69.25%"></b></i><strong>26<!-- -->/<!-- -->94<!-- -->・<!-- -->27.7<!-- -->%</strong></div><div><span>宮門護衛</span><i><b style="width:67%"></b></i><strong>15<!-- -->/<!-- -->56<!-- -->・<!-- -->26.8<!-- -->%</strong></div><div><span>樂舞人員</span><i><b style="width:38%"></b></i><strong>7<!-- -->/<!-- -->46<!-- -->・<!-- -->15.2<!-- -->%</strong></div></div></section><section class="incubation-summary-card"><div><span class="lab-kicker">TIME</span><h3>餐後潛伏期摘要</h3></div><div class="incubation-metrics"><article><small>中位數</small><b>10.25 h</b></article><article><small>IQR</small><b>7.75–14.25 h</b></article><article><small>範圍</small><b>4–28.75 h</b></article><article><small>手冊主要區間 5–28 h</small><b>74/77・96.1%</b></article></div><p>以每人用餐結束時間為起點；摘要和流行曲線共同描述時間型態。</p></section></div></div></div></details><div class="advanced-topic-stack"><details class="sealed-panel advanced"><summary><span>A2.6</span><div><b>進階參數版本｜個人層級 Spot Map／宮苑疾病地圖</b><small>展開查看概念、目前資料條件、需補欄位，以及擴充後可用的 Prompt 與程式。</small></div><i aria-hidden="true">開封</i></summary><div class="sealed-content"><div class="advanced-topic"><div class="advanced-topic-intro"><article><small>分析概念</small><p>把每名參與者的實際位置放回宮苑平面，觀察病例是否靠近特定供餐台、座區或環境來源。</p></article><article><small>目前資料條件</small><p>目前只有 site_id，能比較三個場地，卻沒有個人座位與宮苑內座標。直接散點會創造資料中不存在的空間聚集。</p></article></div><div class="advanced-requirements"><article><small>目前缺少</small><ul><li>個人所在座區與座位</li><li>宮苑平面座標</li><li>供餐台與環境設施位置</li></ul></article><article><small>擴充資料需加入</small><div><code>dining_zone</code><code>seat_row</code><code>seat_column</code><code>palace_x</code><code>palace_y</code><code>serving_station_id</code></div></article></div><section class="advanced-prompt"><small>擴充後推薦 Prompt</small><article class="prompt-card"><span>01</span><pre>我有 person_line_list_spatial.csv，包含 person_id、primary、site_id、palace_x、palace_y、dining_zone、serving_station_id。請先檢查座標缺失與每場地分母，再以 site_id 分面繪製 Spot Map：病例用朱砂紅實心點、非病例用墨綠空心點、供餐台用金色菱形。請保留相同比例尺，標示每場地病例數／可分類人數，並說明空間聚集仍需結合暴露與環境證據。
+
+【進階圖表與 SVG 規格】
+- 優先使用 Plotly，並以 toImageButtonOptions 將工具列下載格式設為 SVG。
+- 若 lifelines、networkx 或其他套件的必要功能只能透過 Matplotlib 呈現，必須另外使用 savefig(..., format=&quot;svg&quot;, bbox_inches=&quot;tight&quot;) 輸出 SVG，並在程式輸出清楚顯示檔名。
+- 圖表須保留分母、事件數、設限數或網絡邊的判定依據；視覺規格沿用米白、墨綠、朱砂紅與金色。</pre><button aria-label="複製第 1 個 Prompt"><i aria-hidden="true">⧉</i>複製 Prompt</button></article></section><section class="advanced-code"><small>擴充後講師程式</small><div class="code-sample"><div class="code-toolbar"><span><i aria-hidden="true">⌘</i> Python · Google Colab</span><button aria-label="複製 Python 程式"><i aria-hidden="true">⧉</i>複製程式</button></div><pre class="code-block"><code># A2.6｜需先生成 person_line_list_spatial.csv 的個人位置欄位
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+spatial = pd.read_csv(&quot;person_line_list_spatial.csv&quot;)
+required = {&quot;person_id&quot;, &quot;primary&quot;, &quot;site_id&quot;, &quot;palace_x&quot;, &quot;palace_y&quot;}
+missing = required.difference(spatial.columns)
+if missing:
+    raise ValueError(f&quot;進階 Spot Map 尚缺欄位: {sorted(missing)}&quot;)
+
+# 每個點代表一名實際有座標紀錄的參與者
+g = sns.relplot(
+    data=spatial.dropna(subset=[&quot;palace_x&quot;, &quot;palace_y&quot;, &quot;primary&quot;]),
+    x=&quot;palace_x&quot;, y=&quot;palace_y&quot;, col=&quot;site_id&quot;, hue=&quot;primary&quot;,
+    style=&quot;primary&quot;, palette={0: &quot;#24594e&quot;, 1: &quot;#a94632&quot;},
+    kind=&quot;scatter&quot;, s=55, facet_kws={&quot;sharex&quot;: False, &quot;sharey&quot;: False}
+)
+g.set_axis_labels(&quot;Palace X&quot;, &quot;Palace Y&quot;)
+g.figure.savefig(&quot;palace_spot_map.svg&quot;, format=&quot;svg&quot;, bbox_inches=&quot;tight&quot;)
+print(&quot;SVG: palace_spot_map.svg&quot;)
+plt.show()</code></pre></div></section></div></div></details><details class="sealed-panel advanced"><summary><span>A2.7</span><div><b>進階參數版本｜Kaplan–Meier 餐後發病曲線</b><small>展開查看概念、目前資料條件、需補欄位，以及擴充後可用的 Prompt 與程式。</small></div><i aria-hidden="true">開封</i></summary><div class="sealed-content"><div class="advanced-topic"><div class="advanced-topic-intro"><article><small>分析概念</small><p>把餐後至發病視為 time-to-event，比較食用與未食用者累積維持無症狀的比例。</p></article><article><small>目前資料條件</small><p>目前非病例只有『沒有發病時間』，缺少每個人的追蹤截止時間與設限原因，因此無法判定他被觀察了多久。</p></article></div><div class="advanced-requirements"><article><small>目前缺少</small><ul><li>統一且可稽核的追蹤起點</li><li>每人追蹤截止時間</li><li>事件與設限指標</li></ul></article><article><small>擴充資料需加入</small><div><code>followup_start_datetime</code><code>followup_end_datetime</code><code>onset_event</code><code>censor_reason</code></div></article></div><section class="advanced-prompt"><small>擴充後推薦 Prompt</small><article class="prompt-card"><span>01</span><pre>我有 outbreak_followup.csv，包含 person_id、jade_dew_custard、followup_start_datetime、followup_end_datetime、symptom_onset_datetime、onset_event、censor_reason。請建立 duration_hours，列出各暴露組樣本數、事件數與設限數，再用 lifelines 畫 Kaplan–Meier 無症狀曲線與 number-at-risk。請解釋這是發病速度的進階描述，不取代流行曲線或主要食品效果分析。
+
+【進階圖表與 SVG 規格】
+- 優先使用 Plotly，並以 toImageButtonOptions 將工具列下載格式設為 SVG。
+- 若 lifelines、networkx 或其他套件的必要功能只能透過 Matplotlib 呈現，必須另外使用 savefig(..., format=&quot;svg&quot;, bbox_inches=&quot;tight&quot;) 輸出 SVG，並在程式輸出清楚顯示檔名。
+- 圖表須保留分母、事件數、設限數或網絡邊的判定依據；視覺規格沿用米白、墨綠、朱砂紅與金色。</pre><button aria-label="複製第 1 個 Prompt"><i aria-hidden="true">⧉</i>複製 Prompt</button></article></section><section class="advanced-code"><small>擴充後講師程式</small><div class="code-sample"><div class="code-toolbar"><span><i aria-hidden="true">⌘</i> Python · Google Colab</span><button aria-label="複製 Python 程式"><i aria-hidden="true">⧉</i>複製程式</button></div><pre class="code-block"><code># A2.7｜需先建立完整追蹤與設限欄位
+import pandas as pd
+from lifelines import KaplanMeierFitter
+import matplotlib.pyplot as plt
+
+followup = pd.read_csv(&quot;outbreak_followup.csv&quot;, parse_dates=[
+    &quot;followup_start_datetime&quot;, &quot;followup_end_datetime&quot;, &quot;symptom_onset_datetime&quot;
+])
+required = {&quot;jade_dew_custard&quot;, &quot;followup_start_datetime&quot;,
+            &quot;followup_end_datetime&quot;, &quot;onset_event&quot;}
+if required.difference(followup.columns):
+    raise ValueError(&quot;請先補齊追蹤起訖、暴露與設限欄位&quot;)
+
+# 發病者用 onset；設限者用 followup_end
+event_or_end = followup[&quot;symptom_onset_datetime&quot;].fillna(followup[&quot;followup_end_datetime&quot;])
+followup[&quot;duration_hours&quot;] = (event_or_end - followup[&quot;followup_start_datetime&quot;]).dt.total_seconds() / 3600
+
+kmf = KaplanMeierFitter()
+for exposed, group in followup.groupby(&quot;jade_dew_custard&quot;):
+    kmf.fit(group[&quot;duration_hours&quot;], group[&quot;onset_event&quot;], label=f&quot;exposed={int(exposed)}&quot;)
+    kmf.plot_survival_function()
+plt.xlabel(&quot;Hours after meal&quot;)
+plt.ylabel(&quot;Probability remaining symptom-free&quot;)
+plt.tight_layout()
+plt.savefig(&quot;km_symptom_free_curve.svg&quot;, format=&quot;svg&quot;, bbox_inches=&quot;tight&quot;)
+print(&quot;SVG: km_symptom_free_curve.svg&quot;)
+plt.show()</code></pre></div></section></div></div></details></div></div></div><div class="chapter-transition"><span>下一階段</span><p>發病時間集中且三場地皆有病例，調查小組開始整理早期訪談與供餐紀錄。</p><strong>進入「<!-- -->形成問卷<!-- -->」</strong></div></article><article class="story-chapter alternate" id="chapter-3"><header class="chapter-header"><div class="chapter-number"><small>案卷</small><strong>A<!-- -->3</strong></div><div class="chapter-copy"><span class="chapter-time">翌日 09:05・早期訪談、菜單與正式問卷會合</span><h2>由早期線索形成問卷，再檢查食品共食</h2><p>八名早期病例的開放式訪談與三場地菜單先形成候選暴露；正式問卷回收後，再用 3,120 列食品暴露資料檢查十項食品的共食結構。</p><blockquote><b>此刻要回答：</b>正式問卷應詢問哪些暴露？候選食品是否存在足以造成混雜的共食關係？</blockquote></div></header><div class="lesson-stack"><section class="cause-panel"><div class="lesson-subhead"><span>A<!-- -->3<!-- -->.1</span><div><b>目前取得的資料與下一步</b><p>先確認資料從哪裡來、為什麼此刻出現，再展開查看實際內容。</p></div></div><div class="current-source-list"><article class="current-source-card"><header><div><span>目前取得</span><h3>八名早期病例訪談摘要</h3></div><code>early_interviews.csv</code></header><div class="source-context-grid"><div><small>從哪裡來</small><p>調查人員先對最早發病的八名參與者進行開放式訪談，整理他們記得的食品與活動。</p></div><div><small>為什麼此刻取得</small><p>用早期線索形成正式問卷的候選項目；此時只建立假說，尚未估計食品效果。</p></div><div><small>本幕要做的圖／輸出</small><p>十項食品共食 heatmap＋問卷欄位藍圖</p></div></div><p class="source-unit"><b>一列代表什麼：</b>一列是一名早期受訪者；共 8 列，因此完整顯示。</p><details class="source-preview"><summary><span>預覽資料內容</span><small>展開</small></summary><div class="source-table-shell"><div class="source-table-note"><span>顯示全部 8 列</span><small>可左右捲動查看完整欄位</small></div><div class="source-table-scroll"><table><thead><tr><th>person_id</th><th>onset_order</th><th>mentioned_foods</th><th>other_clue</th></tr></thead><tbody><tr><td>P0227</td><td>1</td><td>凝露羹、桂露飲、金蓮酥</td><td>承月臺早席</td></tr><tr><td>P0306</td><td>2</td><td>凝露羹、桂露飲、梅釉鮮根</td><td>蘅芳苑晚席</td></tr><tr><td>P0196</td><td>3</td><td>凝露羹、桂露飲、鴨卷</td><td>承月臺早席</td></tr><tr><td>P0016</td><td>4</td><td>凝露羹、桂露飲、金蓮酥</td><td>昭華殿早席</td></tr><tr><td>P0197</td><td>5</td><td>凝露羹、雪梨湯、梅釉鮮根</td><td>蘅芳苑早席</td></tr><tr><td>P0241</td><td>6</td><td>凝露羹、鴨卷、芝麻米糕</td><td>承月臺早席</td></tr><tr><td>P0214</td><td>7</td><td>凝露羹、金蓮酥、鴨卷</td><td>蘅芳苑早席</td></tr><tr><td>P0311</td><td>8</td><td>凝露羹、桂露飲、金蓮酥</td><td>昭華殿晚席</td></tr></tbody></table></div></div></details></article><article class="current-source-card"><header><div><span>目前取得</span><h3>三場地菜單與供餐批次</h3></div><code>menu_by_site.csv</code></header><div class="source-context-grid"><div><small>從哪裡來</small><p>千秋宴主辦單位與尚膳署提供的場地菜單、餐套、供餐批次及實際上菜時間。</p></div><div><small>為什麼此刻取得</small><p>確認早期病例提到的食品是否真的在其場地供應，並辨識共享食品、場地限定食品與批次結構。</p></div><div><small>本幕要做的圖／輸出</small><p>十項食品共食 heatmap＋問卷欄位藍圖</p></div></div><p class="source-unit"><b>一列代表什麼：</b>一列是一個場地×梯次×餐套×食品組合；共 180 列，完整顯示。</p><details class="source-preview"><summary><span>預覽資料內容</span><small>展開</small></summary><p class="source-preview-state">正在讀取資料預覽…</p></details></article><article class="current-source-card"><header><div><span>目前取得</span><h3>正式食品暴露問卷長表</h3></div><code>food_exposure.csv</code></header><div class="source-context-grid"><div><small>從哪裡來</small><p>依早期訪談與菜單設計標準問卷，再以參與者訪談和可用供餐紀錄完成。</p></div><div><small>為什麼此刻取得</small><p>為每項食品建立食用／未食用／未知紀錄，才能計算食品別侵襲率、2×2 表、OR 與共食關係。</p></div><div><small>本幕要做的圖／輸出</small><p>十項食品共食 heatmap＋問卷欄位藍圖</p></div></div><p class="source-unit"><b>一列代表什麼：</b>一列是一名參與者×一項食品；共 3,120 列，預覽前 10 列。</p><details class="source-preview"><summary><span>預覽資料內容</span><small>展開</small></summary><p class="source-preview-state">正在讀取資料預覽…</p></details></article><article class="current-source-card"><header><div><span>目前取得</span><h3>資料字典</h3></div><code>data_dictionary.csv</code></header><div class="source-context-grid"><div><small>從哪裡來</small><p>資料管理人員隨調查資料提供的欄位規格，記錄型別、允許值、缺失規則與繁體中文說明。</p></div><div><small>為什麼此刻取得</small><p>在請 AI 寫程式前先核對欄位意義，避免把代碼、空白或資料單位解讀錯誤。</p></div><div><small>本幕要做的圖／輸出</small><p>十項食品共食 heatmap＋問卷欄位藍圖</p></div></div><p class="source-unit"><b>一列代表什麼：</b>一列是一個欄位定義；共 67 列，完整顯示。</p><details class="source-preview"><summary><span>預覽資料內容</span><small>展開</small></summary><p class="source-preview-state">正在讀取資料預覽…</p></details></article></div><blockquote class="analysis-direction"><b>接下來的分析方向</b><p>整理共同與場地限定食品，固定 yes／no／unknown 編碼，再以正式問卷建立人×食品矩陣；最終講師版中凝露羹與桂露飲的相關係數為 0.375。</p></blockquote></section><section class="analysis-brief"><div class="lesson-subhead"><span>A3.2</span><div><b>下一步要做的圖與分析</b><p>把資料表、分母、產出與判讀範圍寫成分析規格。</p></div></div><div class="analysis-spec-grid"><article><small>圖表／輸出</small><strong>十項食品共食 heatmap＋問卷欄位藍圖</strong></article><article><small>資料表</small><strong>early_interviews.csv、menu_by_site.csv、food_exposure.csv</strong></article><article><small>分母</small><strong>8 名早期病例只用於形成假說；共食係數採每一對食品皆有回答者</strong></article><article class="wide"><small>可以回答</small><p>形成標準問卷，並辨識需在後續模型共同納入的共食結構；相關不直接確認食品媒介。</p></article><article class="wide next-scope"><small>後續接續</small><p>每項食品使用自己的已知暴露分母建立 2×2 表，再以分層與模型拆分候選訊號。</p></article></div></section><section class="prompt-sequence"><div class="lesson-subhead"><span>A3.3</span><div><b>推薦 Prompt</b><p>用一般人的方式說明手上的資料與想回答的問題，可直接貼給 Gemini。</p></div></div><div class="prompt-brief-grid"><article><small>現有資料與檔名</small><p>early_interviews.csv：八名早期病例訪談摘要、menu_by_site.csv：三場地菜單與供餐批次、food_exposure.csv：正式食品暴露問卷長表、data_dictionary.csv：資料字典</p></article><article><small>要探討的問題</small><p>正式問卷應詢問哪些暴露？候選食品是否存在足以造成混雜的共食關係？</p></article><article><small>預計圖表</small><p>十項食品共食 heatmap＋問卷欄位藍圖</p></article><article><small>預期呈現</small><p>候選暴露、問卷 schema、yes／no／unknown 規則、十項食品相關矩陣，以及凝露羹×桂露飲 r=0.375。</p></article><article class="wide"><small>視覺指示</small><p>heatmap 使用發散色階、格內標成對 Pearson 相關係數；問卷藍圖標示檔名、欄位與缺失規則。</p></article></div><div class="prompt-list"><article class="prompt-card"><span>01</span><pre>我是負責這場群聚事件的公衛調查學員，目前還不會自己寫 Python。
+
+【目前取得的調查資料】
+- early_interviews.csv：八名早期病例訪談摘要
+- menu_by_site.csv：三場地菜單與供餐批次
+- food_exposure.csv：正式食品暴露問卷長表
+- data_dictionary.csv：資料字典
+
+【這一階段的公衛問題】
+正式問卷應詢問哪些暴露？候選食品是否存在足以造成混雜的共食關係？
+
+【這次想完成的調查工作】
+請先用白話說明早期病例訪談和實際菜單各能告訴我們什麼，再整理出共同食品、場地限定食品、供餐批次和非食品線索。
+
+【希望得到的調查成果】
+候選暴露、問卷 schema、yes／no／unknown 規則、十項食品相關矩陣，以及凝露羹×桂露飲 r=0.375。
+
+如果需要圖表，可使用：十項食品共食 heatmap＋問卷欄位藍圖
+畫面希望採用：heatmap 使用發散色階、格內標成對 Pearson 相關係數；問卷藍圖標示檔名、欄位與缺失規則。
+
+【如果這一步需要畫圖】
+請使用 Plotly 製作可以互動的圖，並讓右上角可以下載 SVG。請替最後的調查報告保留這張圖；如何命名與保存由你處理，完成後告訴我即可。圖表要寫清楚分析對象與分母，中文字、日期和食品名稱保持可讀，滑鼠移到圖上時能看到這次真正使用的人數、比例或信賴區間。配色沿用米白、墨綠、朱砂紅與金色。
+
+請先閱讀上述資料與欄位說明，用白話告訴我哪些資料能回答這個問題、應使用誰作為分母，以及你準備怎麼做。確認後，再提供一格可直接在 Colab 執行的完整 Python 程式。程式內部的資料名稱與寫法由你安排；請加入繁體中文註解，完成後告訴我建立了哪些分析成果、要檢查哪些數字，以及下一步可以如何沿用。</pre><button aria-label="複製第 1 個 Prompt"><i aria-hidden="true">⧉</i>複製 Prompt</button></article><article class="prompt-card"><span>02</span><pre>我是負責這場群聚事件的公衛調查學員，目前還不會自己寫 Python。
+
+【目前取得的調查資料】
+- early_interviews.csv：八名早期病例訪談摘要
+- menu_by_site.csv：三場地菜單與供餐批次
+- food_exposure.csv：正式食品暴露問卷長表
+- data_dictionary.csv：資料字典
+
+【這一階段的公衛問題】
+正式問卷應詢問哪些暴露？候選食品是否存在足以造成混雜的共食關係？
+
+【這次想完成的調查工作】
+請把這些線索整理成一份所有參與者都能回答的宴會問卷。每題使用有、沒有、不確定三種答案，並說明空白資料後續怎麼處理。
+
+【希望得到的調查成果】
+候選暴露、問卷 schema、yes／no／unknown 規則、十項食品相關矩陣，以及凝露羹×桂露飲 r=0.375。
+
+如果需要圖表，可使用：十項食品共食 heatmap＋問卷欄位藍圖
+畫面希望採用：heatmap 使用發散色階、格內標成對 Pearson 相關係數；問卷藍圖標示檔名、欄位與缺失規則。
+
+【如果這一步需要畫圖】
+請使用 Plotly 製作可以互動的圖，並讓右上角可以下載 SVG。請替最後的調查報告保留這張圖；如何命名與保存由你處理，完成後告訴我即可。圖表要寫清楚分析對象與分母，中文字、日期和食品名稱保持可讀，滑鼠移到圖上時能看到這次真正使用的人數、比例或信賴區間。配色沿用米白、墨綠、朱砂紅與金色。
+
+請先閱讀上述資料與欄位說明，用白話告訴我哪些資料能回答這個問題、應使用誰作為分母，以及你準備怎麼做。確認後，再提供一格可直接在 Colab 執行的完整 Python 程式。程式內部的資料名稱與寫法由你安排；請加入繁體中文註解，完成後告訴我建立了哪些分析成果、要檢查哪些數字，以及下一步可以如何沿用。</pre><button aria-label="複製第 2 個 Prompt"><i aria-hidden="true">⧉</i>複製 Prompt</button></article><article class="prompt-card"><span>03</span><pre>我是負責這場群聚事件的公衛調查學員，目前還不會自己寫 Python。
+
+【目前取得的調查資料】
+- early_interviews.csv：八名早期病例訪談摘要
+- menu_by_site.csv：三場地菜單與供餐批次
+- food_exposure.csv：正式食品暴露問卷長表
+- data_dictionary.csv：資料字典
+
+【這一階段的公衛問題】
+正式問卷應詢問哪些暴露？候選食品是否存在足以造成混雜的共食關係？
+
+【這次想完成的調查工作】
+請幫我檢查哪些食品常被一起食用，並用 Plotly heatmap 呈現。請直接標示成對相關係數，指出哪些食品存在需要在後續模型共同考慮的共食結構；不要把相關本身解讀為食品媒介證據。
+
+【希望得到的調查成果】
+候選暴露、問卷 schema、yes／no／unknown 規則、十項食品相關矩陣，以及凝露羹×桂露飲 r=0.375。
+
+如果需要圖表，可使用：十項食品共食 heatmap＋問卷欄位藍圖
+畫面希望採用：heatmap 使用發散色階、格內標成對 Pearson 相關係數；問卷藍圖標示檔名、欄位與缺失規則。
+
+【如果這一步需要畫圖】
+請使用 Plotly 製作可以互動的圖，並讓右上角可以下載 SVG。請替最後的調查報告保留這張圖；如何命名與保存由你處理，完成後告訴我即可。圖表要寫清楚分析對象與分母，中文字、日期和食品名稱保持可讀，滑鼠移到圖上時能看到這次真正使用的人數、比例或信賴區間。配色沿用米白、墨綠、朱砂紅與金色。
+
+請先閱讀上述資料與欄位說明，用白話告訴我哪些資料能回答這個問題、應使用誰作為分母，以及你準備怎麼做。確認後，再提供一格可直接在 Colab 執行的完整 Python 程式。程式內部的資料名稱與寫法由你安排；請加入繁體中文註解，完成後告訴我建立了哪些分析成果、要檢查哪些數字，以及下一步可以如何沿用。</pre><button aria-label="複製第 3 個 Prompt"><i aria-hidden="true">⧉</i>複製 Prompt</button></article></div></section><div class="reveal-stack"><details class="sealed-panel code"><summary><span>A3.4</span><div><b>講師的示範程式</b><small>完成自己的版本後展開核對；程式含註解並可直接複製到 Google Colab。</small></div><i aria-hidden="true">開封</i></summary><div class="sealed-content"><div class="code-sample"><div class="code-toolbar"><span><i aria-hidden="true">⌘</i> Python · Google Colab</span><button aria-label="複製 Python 程式"><i aria-hidden="true">⧉</i>複製程式</button></div><pre class="code-block"><code># 3.4｜由早期訪談形成候選暴露，並以 Plotly 檢查食品共食
+import numpy as np
+import pandas as pd
+import plotly.graph_objects as go
+
+FIGURES = globals().get(&quot;FIGURES&quot;, {})
+
+def svg_config(filename):
+    return {
+        &quot;displaylogo&quot;: False, &quot;responsive&quot;: True,
+        &quot;toImageButtonOptions&quot;: {&quot;format&quot;: &quot;svg&quot;, &quot;filename&quot;: filename,
+                                 &quot;height&quot;: None, &quot;width&quot;: None, &quot;scale&quot;: 1},
+    }
+
+menu = pd.read_csv(&quot;menu_by_site.csv&quot;)
+early = pd.read_csv(&quot;early_interviews.csv&quot;)
+food_exposure = pd.read_csv(&quot;food_exposure.csv&quot;)
+
+# 早期訪談用來形成問卷假說
+candidate_foods = (
+    early.query(&quot;is_early_case == 1&quot;)
+    .groupby(&quot;food_id&quot;)[&quot;reported_consumed&quot;].mean()
+    .sort_values(ascending=False)
+)
+
+# 正式問卷回收後，以所有已知暴露資料計算共食相關
+wide = food_exposure.pivot(index=&quot;person_id&quot;, columns=&quot;food_id&quot;, values=&quot;reported_consumed&quot;)
+corr = wide.corr(min_periods=30)
+fig = go.Figure(go.Heatmap(
+    z=corr.to_numpy(), x=corr.columns, y=corr.index,
+    zmin=-1, zmax=1, zmid=0,
+    colorscale=[[0,&quot;#496782&quot;],[.5,&quot;#fbf7ee&quot;],[1,&quot;#9c4a36&quot;]],
+    text=np.round(corr.to_numpy(), 2), texttemplate=&quot;%{text:.2f}&quot;,
+    hovertemplate=&quot;%{y} × %{x}&lt;br&gt;相關係數：%{z:.2f}&lt;extra&gt;&lt;/extra&gt;&quot;,
+))
+fig.update_layout(
+    title=&quot;食品共食相關性&quot;, template=&quot;plotly_white&quot;, height=680,
+    paper_bgcolor=&quot;#fbf7ee&quot;, font_family=&quot;Noto Sans TC, Microsoft JhengHei, sans-serif&quot;,
+)
+fig.update_xaxes(tickangle=-35)
+FIGURES[&quot;food_coexposure_heatmap&quot;] = fig
+fig.show(config=svg_config(&quot;food_coexposure_heatmap&quot;))</code></pre></div></div></details><details class="sealed-panel demo"><summary><span>A3.5</span><div><b>講師的示範</b><small>核對講師產生的圖、表、分母與判讀檢查點。</small></div><i aria-hidden="true">開封</i></summary><div class="sealed-content"><div class="questionnaire-demo"><div class="interview-strip"><span>早期病例訪談</span><i>＋</i><span>三場地菜單</span><i>＋</i><span>供餐批次</span><b>→ 宴會專用問卷</b></div><div class="matrix-wrap"><div class="matrix-labels"><span>凝露羹</span><span>桂露飲</span><span>鴨卷</span><span>金蓮酥</span><span>玄茶</span></div><div class="matrix"><i title="凝露羹 × 凝露羹: 1" style="background:rgba(169,70,50,1)"></i><i title="凝露羹 × 桂露飲: 0.375" style="background:rgba(169,70,50,0.375)"></i><i title="凝露羹 × 鴨卷: 0.2" style="background:rgba(169,70,50,0.2)"></i><i title="凝露羹 × 金蓮酥: 0.25" style="background:rgba(169,70,50,0.25)"></i><i title="凝露羹 × 玄茶: 0.11" style="background:rgba(169,70,50,0.11)"></i><i title="桂露飲 × 凝露羹: 0.375" style="background:rgba(169,70,50,0.375)"></i><i title="桂露飲 × 桂露飲: 1" style="background:rgba(169,70,50,1)"></i><i title="桂露飲 × 鴨卷: 0.1" style="background:rgba(169,70,50,0.1)"></i><i title="桂露飲 × 金蓮酥: 0.24" style="background:rgba(169,70,50,0.24)"></i><i title="桂露飲 × 玄茶: 0.02" style="background:rgba(169,70,50,0.02)"></i><i title="鴨卷 × 凝露羹: 0.2" style="background:rgba(169,70,50,0.2)"></i><i title="鴨卷 × 桂露飲: 0.1" style="background:rgba(169,70,50,0.1)"></i><i title="鴨卷 × 鴨卷: 1" style="background:rgba(169,70,50,1)"></i><i title="鴨卷 × 金蓮酥: 0.27" style="background:rgba(169,70,50,0.27)"></i><i title="鴨卷 × 玄茶: 0.01" style="background:rgba(169,70,50,0.01)"></i><i title="金蓮酥 × 凝露羹: 0.25" style="background:rgba(169,70,50,0.25)"></i><i title="金蓮酥 × 桂露飲: 0.24" style="background:rgba(169,70,50,0.24)"></i><i title="金蓮酥 × 鴨卷: 0.27" style="background:rgba(169,70,50,0.27)"></i><i title="金蓮酥 × 金蓮酥: 1" style="background:rgba(169,70,50,1)"></i><i title="金蓮酥 × 玄茶: 0" style="background:rgba(169,70,50,0)"></i><i title="玄茶 × 凝露羹: 0.11" style="background:rgba(169,70,50,0.11)"></i><i title="玄茶 × 桂露飲: 0.02" style="background:rgba(169,70,50,0.02)"></i><i title="玄茶 × 鴨卷: 0.01" style="background:rgba(169,70,50,0.01)"></i><i title="玄茶 × 金蓮酥: 0" style="background:rgba(169,70,50,0)"></i><i title="玄茶 × 玄茶: 1" style="background:rgba(169,70,50,1)"></i></div></div><p class="validation-note"><b>講師判讀：</b>最終講師版中，凝露羹與桂露飲的成對 Pearson 相關係數為 0.375，顯示足以檢查混雜的部分共食；兩項食品仍須分開詢問，並共同放入後續分層與調整模型。</p></div></div></details></div></div><div class="chapter-transition"><span>下一階段</span><p>共食結構已記錄；下一卷讓每項食品以自己的已知暴露分母進入粗分析。</p><strong>進入「<!-- -->食品粗分析<!-- -->」</strong></div></article><article class="story-chapter " id="chapter-4"><header class="chapter-header"><div class="chapter-number"><small>案卷</small><strong>A<!-- -->4</strong></div><div class="chapter-copy"><span class="chapter-time">翌日 10:00・正式問卷陸續回收</span><h2>以每項食品自己的分母建立 2×2 表</h2><p>回覆者可能跳過個別題目，也可能記錄 unknown。每道食品因此擁有自己的完整案例分母。</p><blockquote><b>此刻要回答：</b>哪些食品在粗分析中和發病呈現關聯？</blockquote></div></header><div class="lesson-stack"><section class="cause-panel"><div class="lesson-subhead"><span>A<!-- -->4<!-- -->.1</span><div><b>目前取得的資料與下一步</b><p>先確認資料從哪裡來、為什麼此刻出現，再展開查看實際內容。</p></div></div><div class="current-source-list"><article class="current-source-card"><header><div><span>目前取得</span><h3>正式食品暴露問卷長表</h3></div><code>food_exposure.csv</code></header><div class="source-context-grid"><div><small>從哪裡來</small><p>依早期訪談與菜單設計標準問卷，再以參與者訪談和可用供餐紀錄完成。</p></div><div><small>為什麼此刻取得</small><p>為每項食品建立食用／未食用／未知紀錄，才能計算食品別侵襲率、2×2 表、OR 與共食關係。</p></div><div><small>本幕要做的圖／輸出</small><p>食品別 2×2 表＋log 尺度 forest plot</p></div></div><p class="source-unit"><b>一列代表什麼：</b>一列是一名參與者×一項食品；共 3,120 列，預覽前 10 列。</p><details class="source-preview"><summary><span>預覽資料內容</span><small>展開</small></summary><p class="source-preview-state">正在讀取資料預覽…</p></details></article><article class="current-source-card"><header><div><span>目前取得</span><h3>個人層級 Line List</h3></div><code>person_line_list.csv</code></header><div class="source-context-grid"><div><small>從哪裡來</small><p>主辦單位的 312 人與會名冊，與調查人員第一輪主動訪談、症狀時間及採檢狀態合併而成。</p></div><div><small>為什麼此刻取得</small><p>建立完整事件分母，並讓每名參與者都能依同一套規則分類病例及描述 Person／Time／Place。</p></div><div><small>本幕要做的圖／輸出</small><p>食品別 2×2 表＋log 尺度 forest plot</p></div></div><p class="source-unit"><b>一列代表什麼：</b>一列是一名參與者；共 312 列，預覽前 10 列。</p><details class="source-preview"><summary><span>預覽資料內容</span><small>展開</small></summary><p class="source-preview-state">正在讀取資料預覽…</p></details></article><article class="current-source-card"><header><div><span>目前取得</span><h3>資料字典</h3></div><code>data_dictionary.csv</code></header><div class="source-context-grid"><div><small>從哪裡來</small><p>資料管理人員隨調查資料提供的欄位規格，記錄型別、允許值、缺失規則與繁體中文說明。</p></div><div><small>為什麼此刻取得</small><p>在請 AI 寫程式前先核對欄位意義，避免把代碼、空白或資料單位解讀錯誤。</p></div><div><small>本幕要做的圖／輸出</small><p>食品別 2×2 表＋log 尺度 forest plot</p></div></div><p class="source-unit"><b>一列代表什麼：</b>一列是一個欄位定義；共 67 列，完整顯示。</p><details class="source-preview"><summary><span>預覽資料內容</span><small>展開</small></summary><p class="source-preview-state">正在讀取資料預覽…</p></details></article></div><blockquote class="analysis-direction"><b>接下來的分析方向</b><p>對十項食品重複同一套 2×2 分析，逐項核對四格、完整分母、侵襲率、OR、CI 與 Fisher exact test。</p></blockquote></section><section class="analysis-brief"><div class="lesson-subhead"><span>A4.2</span><div><b>下一步要做的圖與分析</b><p>把資料表、分母、產出與判讀範圍寫成分析規格。</p></div></div><div class="analysis-spec-grid"><article><small>圖表／輸出</small><strong>食品別 2×2 表＋log 尺度 forest plot</strong></article><article><small>資料表</small><strong>food_exposure.csv、person_line_list.csv</strong></article><article><small>分母</small><strong>每項食品暴露與病例狀態皆有紀錄者；例如凝露羹 n=266</strong></article><article class="wide"><small>可以回答</small><p>比較食用與未食用者的發病情形；凝露羹 70／179 對 5／87，粗 OR 10.53（95% CI 4.07–27.27）。</p></article><article class="wide next-scope"><small>後續接續</small><p>將凝露羹、桂露飲與場地共同納入分層及模型，比較獨立訊號。</p></article></div></section><section class="prompt-sequence"><div class="lesson-subhead"><span>A4.3</span><div><b>推薦 Prompt</b><p>用一般人的方式說明手上的資料與想回答的問題，可直接貼給 Gemini。</p></div></div><div class="prompt-brief-grid"><article><small>現有資料與檔名</small><p>food_exposure.csv：正式食品暴露問卷長表、person_line_list.csv：個人層級 Line List、data_dictionary.csv：資料字典</p></article><article><small>要探討的問題</small><p>哪些食品在粗分析中和發病呈現關聯？</p></article><article><small>預計圖表</small><p>食品別 2×2 表＋log 尺度 forest plot</p></article><article><small>預期呈現</small><p>每項食品的 a／b／c／d、n_complete、兩組侵襲率、OR、95% CI、Fisher p 與 forest plot。</p></article><article class="wide"><small>視覺指示</small><p>forest plot 使用 log x 軸，OR=1 畫垂直參考線；朱砂紅標主要候選、墨綠標其他食品；右側列 OR 與 CI。</p></article></div><div class="prompt-list"><article class="prompt-card"><span>01</span><pre>我是負責這場群聚事件的公衛調查學員，目前還不會自己寫 Python。
+
+【目前取得的調查資料】
+- food_exposure.csv：正式食品暴露問卷長表
+- person_line_list.csv：個人層級 Line List
+- data_dictionary.csv：資料字典
+
+【這一階段的公衛問題】
+哪些食品在粗分析中和發病呈現關聯？
+
+【這次想完成的調查工作】
+請先用白話解釋一張食品 2×2 表的四格分別是哪些人，並說明為什麼每項食品可能有不同的分析分母。
+
+【希望得到的調查成果】
+每項食品的 a／b／c／d、n_complete、兩組侵襲率、OR、95% CI、Fisher p 與 forest plot。
+
+如果需要圖表，可使用：食品別 2×2 表＋log 尺度 forest plot
+畫面希望採用：forest plot 使用 log x 軸，OR=1 畫垂直參考線；朱砂紅標主要候選、墨綠標其他食品；右側列 OR 與 CI。
+
+【如果這一步需要畫圖】
+請使用 Plotly 製作可以互動的圖，並讓右上角可以下載 SVG。請替最後的調查報告保留這張圖；如何命名與保存由你處理，完成後告訴我即可。圖表要寫清楚分析對象與分母，中文字、日期和食品名稱保持可讀，滑鼠移到圖上時能看到這次真正使用的人數、比例或信賴區間。配色沿用米白、墨綠、朱砂紅與金色。
+
+請先閱讀上述資料與欄位說明，用白話告訴我哪些資料能回答這個問題、應使用誰作為分母，以及你準備怎麼做。確認後，再提供一格可直接在 Colab 執行的完整 Python 程式。程式內部的資料名稱與寫法由你安排；請加入繁體中文註解，完成後告訴我建立了哪些分析成果、要檢查哪些數字，以及下一步可以如何沿用。</pre><button aria-label="複製第 1 個 Prompt"><i aria-hidden="true">⧉</i>複製 Prompt</button></article><article class="prompt-card"><span>02</span><pre>我是負責這場群聚事件的公衛調查學員，目前還不會自己寫 Python。
+
+【目前取得的調查資料】
+- food_exposure.csv：正式食品暴露問卷長表
+- person_line_list.csv：個人層級 Line List
+- data_dictionary.csv：資料字典
+
+【這一階段的公衛問題】
+哪些食品在粗分析中和發病呈現關聯？
+
+【這次想完成的調查工作】
+請對十項食品做相同的比較：食用者和未食用者各有多少人發病，並計算侵襲率、OR、95% 信賴區間和 Fisher p 值。再用 Plotly 森林圖排列結果。
+
+【希望得到的調查成果】
+每項食品的 a／b／c／d、n_complete、兩組侵襲率、OR、95% CI、Fisher p 與 forest plot。
+
+如果需要圖表，可使用：食品別 2×2 表＋log 尺度 forest plot
+畫面希望採用：forest plot 使用 log x 軸，OR=1 畫垂直參考線；朱砂紅標主要候選、墨綠標其他食品；右側列 OR 與 CI。
+
+【如果這一步需要畫圖】
+請使用 Plotly 製作可以互動的圖，並讓右上角可以下載 SVG。請替最後的調查報告保留這張圖；如何命名與保存由你處理，完成後告訴我即可。圖表要寫清楚分析對象與分母，中文字、日期和食品名稱保持可讀，滑鼠移到圖上時能看到這次真正使用的人數、比例或信賴區間。配色沿用米白、墨綠、朱砂紅與金色。
+
+請先閱讀上述資料與欄位說明，用白話告訴我哪些資料能回答這個問題、應使用誰作為分母，以及你準備怎麼做。確認後，再提供一格可直接在 Colab 執行的完整 Python 程式。程式內部的資料名稱與寫法由你安排；請加入繁體中文註解，完成後告訴我建立了哪些分析成果、要檢查哪些數字，以及下一步可以如何沿用。</pre><button aria-label="複製第 2 個 Prompt"><i aria-hidden="true">⧉</i>複製 Prompt</button></article><article class="prompt-card"><span>03</span><pre>我是負責這場群聚事件的公衛調查學員，目前還不會自己寫 Python。
+
+【目前取得的調查資料】
+- food_exposure.csv：正式食品暴露問卷長表
+- person_line_list.csv：個人層級 Line List
+- data_dictionary.csv：資料字典
+
+【這一階段的公衛問題】
+哪些食品在粗分析中和發病呈現關聯？
+
+【這次想完成的調查工作】
+請替我核對每項食品的四格人數是否加總成正確分母。最後用白話指出兩項值得進一步調查的候選食品，以及目前的粗分析還沒處理什麼。
+
+【希望得到的調查成果】
+每項食品的 a／b／c／d、n_complete、兩組侵襲率、OR、95% CI、Fisher p 與 forest plot。
+
+如果需要圖表，可使用：食品別 2×2 表＋log 尺度 forest plot
+畫面希望採用：forest plot 使用 log x 軸，OR=1 畫垂直參考線；朱砂紅標主要候選、墨綠標其他食品；右側列 OR 與 CI。
+
+【如果這一步需要畫圖】
+請使用 Plotly 製作可以互動的圖，並讓右上角可以下載 SVG。請替最後的調查報告保留這張圖；如何命名與保存由你處理，完成後告訴我即可。圖表要寫清楚分析對象與分母，中文字、日期和食品名稱保持可讀，滑鼠移到圖上時能看到這次真正使用的人數、比例或信賴區間。配色沿用米白、墨綠、朱砂紅與金色。
+
+請先閱讀上述資料與欄位說明，用白話告訴我哪些資料能回答這個問題、應使用誰作為分母，以及你準備怎麼做。確認後，再提供一格可直接在 Colab 執行的完整 Python 程式。程式內部的資料名稱與寫法由你安排；請加入繁體中文註解，完成後告訴我建立了哪些分析成果、要檢查哪些數字，以及下一步可以如何沿用。</pre><button aria-label="複製第 3 個 Prompt"><i aria-hidden="true">⧉</i>複製 Prompt</button></article></div></section><div class="reveal-stack"><details class="sealed-panel code"><summary><span>A4.4</span><div><b>講師的示範程式</b><small>完成自己的版本後展開核對；程式含註解並可直接複製到 Google Colab。</small></div><i aria-hidden="true">開封</i></summary><div class="sealed-content"><div class="code-sample"><div class="code-toolbar"><span><i aria-hidden="true">⌘</i> Python · Google Colab</span><button aria-label="複製 Python 程式"><i aria-hidden="true">⧉</i>複製程式</button></div><pre class="code-block"><code># 4.4｜建立可重用的 2×2 表函數
+import pandas as pd
+import scipy.stats
+
+def two_by_two(data, exposure, outcome=&quot;primary&quot;):
+    # 每項食品使用暴露與病例狀態皆已知者作為分母
+    x = data[[exposure, outcome]].dropna()
+    tab = pd.crosstab(x[exposure], x[outcome]).reindex(index=[1,0], columns=[1,0], fill_value=0)
+    a, b, c, d = tab.loc[1,1], tab.loc[1,0], tab.loc[0,1], tab.loc[0,0]
+    odds_ratio, fisher_p = scipy.stats.fisher_exact([[a,b],[c,d]])
+    return {&quot;a&quot;:a, &quot;b&quot;:b, &quot;c&quot;:c, &quot;d&quot;:d, &quot;n_complete&quot;:len(x),
+            &quot;attack_rate_exposed&quot;:a/(a+b), &quot;attack_rate_unexposed&quot;:c/(c+d),
+            &quot;or&quot;:odds_ratio, &quot;fisher_p&quot;:fisher_p}
+
+# 範例：result = two_by_two(analysis, &quot;jade_dew_custard&quot;)</code></pre></div></div></details><details class="sealed-panel demo"><summary><span>A4.5</span><div><b>講師的示範</b><small>核對講師產生的圖、表、分母與判讀檢查點。</small></div><i aria-hidden="true">開封</i></summary><div class="sealed-content"><div class="dual-demo"><section class="lab-panel calculator-lab"><div class="lab-panel-heading"><div><span class="lab-kicker">講師示範工具</span><h3>2×2 表驗算器</h3></div><button class="text-button">清除</button></div><div class="table-two-by-two"><div></div><b>病例</b><b>非病例</b><b>暴露</b><label>a<input aria-label="a" inputMode="numeric" value=""/></label><label>b<input aria-label="b" inputMode="numeric" value=""/></label><b>未暴露</b><label>c<input aria-label="c" inputMode="numeric" value=""/></label><label>d<input aria-label="d" inputMode="numeric" value=""/></label></div><div class="calculator-results"><p>輸入 a、b、c、d，核對 AI 輸出的分母、侵襲率與 OR。</p></div></section><section class="lab-panel"><div class="lab-panel-heading"><div><span class="lab-kicker">講師示範</span><h3>十項食品粗 OR</h3></div></div><div class="forest-chart"><div class="forest-axis"><span>0.3</span><span>1</span><span>3</span><span>10</span><span>30</span></div><div class="forest-row"><span class="forest-name">翡翠凝露羹</span><div class="forest-track"><i class="null-line" style="left:26.14393726401688%"></i><i class="ci-line" style="left:56.62365772527787%;width:41.30453643582049%"></i><i class="or-dot" style="left:77.2653558232912%"></i></div><b>10.53</b></div><div class="forest-row"><span class="forest-name">合歡桂露飲</span><div class="forest-track"><i class="null-line" style="left:26.14393726401688%"></i><i class="ci-line" style="left:35.938919884478565%;width:24.847363343399813%"></i><i class="or-dot" style="left:48.34617705992069%"></i></div><b>2.78</b></div><div class="forest-row"><span class="forest-name">松仁鴨卷</span><div class="forest-track"><i class="null-line" style="left:26.14393726401688%"></i><i class="ci-line" style="left:32.66062568876718%;width:24.85160440488633%"></i><i class="or-dot" style="left:45.06383231142376%"></i></div><b>2.39</b></div><div class="forest-row"><span class="forest-name">金蓮酥</span><div class="forest-track"><i class="null-line" style="left:26.14393726401688%"></i><i class="ci-line" style="left:26.573945852112757%;width:23.642122837019365%"></i><i class="or-dot" style="left:38.41957065472437%"></i></div><b>1.76</b></div><div class="forest-row"><span class="forest-name">御製玄茶</span><div class="forest-track"><i class="null-line" style="left:26.14393726401688%"></i><i class="ci-line" style="left:22.86885982619527%;width:27.982807138743752%"></i><i class="or-dot" style="left:36.88612966640177%"></i></div><b>1.64</b></div><div class="forest-row"><span class="forest-name">梅釉鮮根</span><div class="forest-track"><i class="null-line" style="left:26.14393726401688%"></i><i class="ci-line" style="left:22.86885982619527%;width:23.856062735983123%"></i><i class="or-dot" style="left:34.803250684630584%"></i></div><b>1.49</b></div><div class="forest-row"><span class="forest-name">香蕈束</span><div class="forest-track"><i class="null-line" style="left:26.14393726401688%"></i><i class="ci-line" style="left:19.0105620855803%;width:24.254509219546893%"></i><i class="or-dot" style="left:31.16246451989502%"></i></div><b>1.26</b></div><div class="forest-row"><span class="forest-name">芝麻米糕</span><div class="forest-track"><i class="null-line" style="left:26.14393726401688%"></i><i class="ci-line" style="left:12.357730744056333%;width:23.302791428475118%"></i><i class="or-dot" style="left:23.856062735983123%"></i></div><b>0.90</b></div><div class="forest-row"><span class="forest-name">雪梨湯</span><div class="forest-track"><i class="null-line" style="left:26.14393726401688%"></i><i class="ci-line" style="left:8.804562952784064%;width:23.6946142294732%"></i><i class="or-dot" style="left:20.468473522640974%"></i></div><b>0.77</b></div><div class="forest-row"><span class="forest-name">春香草盤</span><div class="forest-track"><i class="null-line" style="left:26.14393726401688%"></i><i class="ci-line" style="left:5.697167615341843%;width:24.94202522064493%"></i><i class="or-dot" style="left:18.086391800879642%"></i></div><b>0.69</b></div></div><p class="validation-note"><b>講師判讀：</b>翡翠凝露羹是主要候選，合歡桂露飲也呈粗關聯；下一幕用共食矩陣與調整模型拆分兩者訊號。</p></section></div></div></details><div class="advanced-topic-stack"><details class="sealed-panel advanced"><summary><span>A4.6</span><div><b>進階參數版本｜攝入量與劑量反應</b><small>展開查看概念、目前資料條件、需補欄位，以及擴充後可用的 Prompt 與程式。</small></div><i aria-hidden="true">開封</i></summary><div class="sealed-content"><div class="advanced-topic"><div class="advanced-topic-intro"><article><small>分析概念</small><p>比較未食用、少量、中量與大量攝入者的發病率，評估風險是否隨劑量增加。</p></article><article><small>目前資料條件</small><p>現有 serving_amount_category 可作描述，但標準 DGP 沒有設定可驗證的劑量梯度，也缺少一致的實際克數。</p></article></div><div class="advanced-requirements"><article><small>目前缺少</small><ul><li>可比較的實際攝入量</li><li>份量測量或供餐紀錄</li><li>DGP 中明確的劑量效果</li></ul></article><article><small>擴充資料需加入</small><div><code>estimated_amount_grams</code><code>number_of_servings</code><code>portion_source</code><code>dose_effect_parameter</code></div></article></div><section class="advanced-prompt"><small>擴充後推薦 Prompt</small><article class="prompt-card"><span>01</span><pre>我有 food_dose_exposure.csv，包含 person_id、primary、food_id、estimated_amount_grams、number_of_servings、portion_source、recall_confidence。請針對 jade_dew_custard 建立未食用／低／中／高劑量分組，輸出各組病例數、分母與侵襲率，畫具 95% CI 的劑量反應點線圖，再以 ordered dose logistic regression 檢查趨勢。請同時呈現原始克數分布與缺失比例。
+
+【進階圖表與 SVG 規格】
+- 優先使用 Plotly，並以 toImageButtonOptions 將工具列下載格式設為 SVG。
+- 若 lifelines、networkx 或其他套件的必要功能只能透過 Matplotlib 呈現，必須另外使用 savefig(..., format=&quot;svg&quot;, bbox_inches=&quot;tight&quot;) 輸出 SVG，並在程式輸出清楚顯示檔名。
+- 圖表須保留分母、事件數、設限數或網絡邊的判定依據；視覺規格沿用米白、墨綠、朱砂紅與金色。</pre><button aria-label="複製第 1 個 Prompt"><i aria-hidden="true">⧉</i>複製 Prompt</button></article></section><section class="advanced-code"><small>擴充後講師程式</small><div class="code-sample"><div class="code-toolbar"><span><i aria-hidden="true">⌘</i> Python · Google Colab</span><button aria-label="複製 Python 程式"><i aria-hidden="true">⧉</i>複製程式</button></div><pre class="code-block"><code># A4.6｜需先有一致的實際攝入量與劑量效果設定
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+dose = pd.read_csv(&quot;food_dose_exposure.csv&quot;)
+required = {&quot;person_id&quot;, &quot;primary&quot;, &quot;food_id&quot;, &quot;estimated_amount_grams&quot;}
+if required.difference(dose.columns):
+    raise ValueError(&quot;進階劑量反應尚缺實際攝入量欄位&quot;)
+
+jade = dose.query(&quot;food_id == &#x27;jade_dew_custard&#x27;&quot;).copy()
+jade[&quot;dose_group&quot;] = pd.cut(
+    jade[&quot;estimated_amount_grams&quot;], [-.1, 0, 80, 160, float(&quot;inf&quot;)],
+    labels=[&quot;none&quot;, &quot;low&quot;, &quot;medium&quot;, &quot;high&quot;]
+)
+summary = jade.groupby(&quot;dose_group&quot;, observed=False)[&quot;primary&quot;].agg([&quot;count&quot;, &quot;sum&quot;, &quot;mean&quot;])
+print(summary.rename(columns={&quot;count&quot;: &quot;n&quot;, &quot;sum&quot;: &quot;cases&quot;, &quot;mean&quot;: &quot;attack_rate&quot;}))
+sns.pointplot(data=jade, x=&quot;dose_group&quot;, y=&quot;primary&quot;, errorbar=(&quot;ci&quot;, 95), color=&quot;#a94632&quot;)
+plt.ylabel(&quot;Attack rate&quot;)
+plt.tight_layout()
+plt.savefig(&quot;dose_response.svg&quot;, format=&quot;svg&quot;, bbox_inches=&quot;tight&quot;)
+print(&quot;SVG: dose_response.svg&quot;)
+plt.show()</code></pre></div></section></div></div></details></div></div></div><div class="chapter-transition"><span>下一階段</span><p>凝露羹粗 OR 最高；它與桂露飲的相關係數為 0.375，下一卷以分層和模型拆分兩者訊號。</p><strong>進入「<!-- -->調整模型<!-- -->」</strong></div></article><article class="story-chapter alternate" id="chapter-5"><header class="chapter-header"><div class="chapter-number"><small>案卷</small><strong>A<!-- -->5</strong></div><div class="chapter-copy"><span class="chapter-time">翌日 10:40・粗分析呈交會議</span><h2>先分層，再用調整模型拆分共食訊號</h2><p>兩項候選存在部分共食（r=0.375）。調查小組先在場地層內比較，再以模型共同納入兩項食品與場地，觀察候選暴露在其他條件相同時保留的訊號。</p><blockquote><b>此刻要回答：</b>場地分層與控制共食後，哪一個效果仍然保留？</blockquote></div></header><div class="lesson-stack"><section class="cause-panel"><div class="lesson-subhead"><span>A<!-- -->5<!-- -->.1</span><div><b>目前取得的資料與下一步</b><p>先確認資料從哪裡來、為什麼此刻出現，再展開查看實際內容。</p></div></div><div class="current-source-list"><article class="current-source-card"><header><div><span>目前取得</span><h3>個人層級 Line List</h3></div><code>person_line_list.csv</code></header><div class="source-context-grid"><div><small>從哪裡來</small><p>主辦單位的 312 人與會名冊，與調查人員第一輪主動訪談、症狀時間及採檢狀態合併而成。</p></div><div><small>為什麼此刻取得</small><p>建立完整事件分母，並讓每名參與者都能依同一套規則分類病例及描述 Person／Time／Place。</p></div><div><small>本幕要做的圖／輸出</small><p>場地分層 2×2 表＋Mantel–Haenszel OR＋粗／調整 OR forest plot</p></div></div><p class="source-unit"><b>一列代表什麼：</b>一列是一名參與者；共 312 列，預覽前 10 列。</p><details class="source-preview"><summary><span>預覽資料內容</span><small>展開</small></summary><p class="source-preview-state">正在讀取資料預覽…</p></details></article><article class="current-source-card"><header><div><span>目前取得</span><h3>正式食品暴露問卷長表</h3></div><code>food_exposure.csv</code></header><div class="source-context-grid"><div><small>從哪裡來</small><p>依早期訪談與菜單設計標準問卷，再以參與者訪談和可用供餐紀錄完成。</p></div><div><small>為什麼此刻取得</small><p>為每項食品建立食用／未食用／未知紀錄，才能計算食品別侵襲率、2×2 表、OR 與共食關係。</p></div><div><small>本幕要做的圖／輸出</small><p>場地分層 2×2 表＋Mantel–Haenszel OR＋粗／調整 OR forest plot</p></div></div><p class="source-unit"><b>一列代表什麼：</b>一列是一名參與者×一項食品；共 3,120 列，預覽前 10 列。</p><details class="source-preview"><summary><span>預覽資料內容</span><small>展開</small></summary><p class="source-preview-state">正在讀取資料預覽…</p></details></article><article class="current-source-card"><header><div><span>目前取得</span><h3>A4 食品粗分析輸出</h3></div><code>food_2x2_primary</code></header><div class="source-context-grid"><div><small>從哪裡來</small><p>A4 將病例分類與食品暴露合併，逐項建立 2×2 表後產生。</p></div><div><small>為什麼此刻取得</small><p>保留粗 OR 與原始四格，供 A5 檢查共食與調整前後效果變化。</p></div><div><small>本幕要做的圖／輸出</small><p>場地分層 2×2 表＋Mantel–Haenszel OR＋粗／調整 OR forest plot</p></div></div><p class="source-unit"><b>一列代表什麼：</b>一列是一項食品；預覽主要候選的完整結果。</p><details class="source-preview"><summary><span>預覽資料內容</span><small>展開</small></summary><div class="source-table-shell"><div class="source-table-note"><span>顯示全部 3 列</span><small>可左右捲動查看完整欄位</small></div><div class="source-table-scroll"><table><thead><tr><th>food</th><th>n_complete</th><th>OR</th><th>95% CI</th></tr></thead><tbody><tr><td>翡翠凝露羹</td><td>266</td><td>10.53</td><td>4.07–27.27</td></tr><tr><td>合歡桂露飲</td><td>—</td><td>2.78</td><td>1.57–4.93</td></tr><tr><td>松仁鴨卷</td><td>—</td><td>2.39</td><td>1.35–4.24</td></tr></tbody></table></div></div></details></article></div><blockquote class="analysis-direction"><b>接下來的分析方向</b><p>先建立場地分層 2×2 表與 Mantel–Haenszel 合併估計，再以 258 個完整案例（73 例）建立 logistic model，核對參考組與收斂，最後並列粗、分層與調整效果。</p></blockquote></section><section class="analysis-brief"><div class="lesson-subhead"><span>A5.2</span><div><b>下一步要做的圖與分析</b><p>把資料表、分母、產出與判讀範圍寫成分析規格。</p></div></div><div class="analysis-spec-grid"><article><small>圖表／輸出</small><strong>場地分層 2×2 表＋Mantel–Haenszel OR＋粗／調整 OR forest plot</strong></article><article><small>資料表</small><strong>person_line_list.csv、food_exposure.csv 合併表</strong></article><article><small>分母</small><strong>分層分析依各場地完整暴露；logistic regression 完整案例 n=258、病例 73</strong></article><article class="wide"><small>可以回答</small><p>比較粗 OR 10.53、MH OR 9.62 與凝露羹調整 OR 8.91（95% CI 3.32–23.93），同時確認桂露飲調整後 CI 包含 1。</p></article><article class="wide next-scope"><small>後續接續</small><p>主要訊號確認後，設定極端缺失假設，評估暴露缺失對效果方向的影響。</p></article></div></section><section class="prompt-sequence"><div class="lesson-subhead"><span>A5.3</span><div><b>推薦 Prompt</b><p>用一般人的方式說明手上的資料與想回答的問題，可直接貼給 Gemini。</p></div></div><div class="prompt-brief-grid"><article><small>現有資料與檔名</small><p>person_line_list.csv：個人層級 Line List、food_exposure.csv：正式食品暴露問卷長表、food_2x2_primary：A4 食品粗分析輸出</p></article><article><small>要探討的問題</small><p>場地分層與控制共食後，哪一個效果仍然保留？</p></article><article><small>預計圖表</small><p>場地分層 2×2 表＋Mantel–Haenszel OR＋粗／調整 OR forest plot</p></article><article><small>預期呈現</small><p>各場地原始四格與層內 OR、MH OR／95% CI、模型 n=258、收斂檢查、調整 OR／95% CI 與對照圖。</p></article><article class="wide"><small>視覺指示</small><p>先用宮苑分層表保留原始四格，再以同一 log x 軸比較粗與調整效果；圖下注明 n=258、病例 73 與參考組。</p></article></div><div class="prompt-list"><article class="prompt-card"><span>01</span><pre>我是負責這場群聚事件的公衛調查學員，目前還不會自己寫 Python。
+
+【目前取得的調查資料】
+- person_line_list.csv：個人層級 Line List
+- food_exposure.csv：正式食品暴露問卷長表
+- food_2x2_primary：A4 食品粗分析輸出
+
+【這一階段的公衛問題】
+場地分層與控制共食後，哪一個效果仍然保留？
+
+【這次想完成的調查工作】
+翡翠凝露羹和合歡桂露飲在粗分析都很可疑。請先檢查兩者有多常一起被食用，再用白話解釋為什麼共食會讓兩項食品看起來都和疾病有關。
+
+【希望得到的調查成果】
+各場地原始四格與層內 OR、MH OR／95% CI、模型 n=258、收斂檢查、調整 OR／95% CI 與對照圖。
+
+如果需要圖表，可使用：場地分層 2×2 表＋Mantel–Haenszel OR＋粗／調整 OR forest plot
+畫面希望採用：先用宮苑分層表保留原始四格，再以同一 log x 軸比較粗與調整效果；圖下注明 n=258、病例 73 與參考組。
+
+【如果這一步需要畫圖】
+請使用 Plotly 製作可以互動的圖，並讓右上角可以下載 SVG。請替最後的調查報告保留這張圖；如何命名與保存由你處理，完成後告訴我即可。圖表要寫清楚分析對象與分母，中文字、日期和食品名稱保持可讀，滑鼠移到圖上時能看到這次真正使用的人數、比例或信賴區間。配色沿用米白、墨綠、朱砂紅與金色。
+
+請先閱讀上述資料與欄位說明，用白話告訴我哪些資料能回答這個問題、應使用誰作為分母，以及你準備怎麼做。確認後，再提供一格可直接在 Colab 執行的完整 Python 程式。程式內部的資料名稱與寫法由你安排；請加入繁體中文註解，完成後告訴我建立了哪些分析成果、要檢查哪些數字，以及下一步可以如何沿用。</pre><button aria-label="複製第 1 個 Prompt"><i aria-hidden="true">⧉</i>複製 Prompt</button></article><article class="prompt-card"><span>02</span><pre>我是負責這場群聚事件的公衛調查學員，目前還不會自己寫 Python。
+
+【目前取得的調查資料】
+- person_line_list.csv：個人層級 Line List
+- food_exposure.csv：正式食品暴露問卷長表
+- food_2x2_primary：A4 食品粗分析輸出
+
+【這一階段的公衛問題】
+場地分層與控制共食後，哪一個效果仍然保留？
+
+【這次想完成的調查工作】
+請先分別在三個場地比較翡翠凝露羹與發病，再把三個場地的結果合併。請保留每個場地的原始四格和分析人數，讓我能人工核對。
+
+【希望得到的調查成果】
+各場地原始四格與層內 OR、MH OR／95% CI、模型 n=258、收斂檢查、調整 OR／95% CI 與對照圖。
+
+如果需要圖表，可使用：場地分層 2×2 表＋Mantel–Haenszel OR＋粗／調整 OR forest plot
+畫面希望採用：先用宮苑分層表保留原始四格，再以同一 log x 軸比較粗與調整效果；圖下注明 n=258、病例 73 與參考組。
+
+【如果這一步需要畫圖】
+請使用 Plotly 製作可以互動的圖，並讓右上角可以下載 SVG。請替最後的調查報告保留這張圖；如何命名與保存由你處理，完成後告訴我即可。圖表要寫清楚分析對象與分母，中文字、日期和食品名稱保持可讀，滑鼠移到圖上時能看到這次真正使用的人數、比例或信賴區間。配色沿用米白、墨綠、朱砂紅與金色。
+
+請先閱讀上述資料與欄位說明，用白話告訴我哪些資料能回答這個問題、應使用誰作為分母，以及你準備怎麼做。確認後，再提供一格可直接在 Colab 執行的完整 Python 程式。程式內部的資料名稱與寫法由你安排；請加入繁體中文註解，完成後告訴我建立了哪些分析成果、要檢查哪些數字，以及下一步可以如何沿用。</pre><button aria-label="複製第 2 個 Prompt"><i aria-hidden="true">⧉</i>複製 Prompt</button></article><article class="prompt-card"><span>03</span><pre>我是負責這場群聚事件的公衛調查學員，目前還不會自己寫 Python。
+
+【目前取得的調查資料】
+- person_line_list.csv：個人層級 Line List
+- food_exposure.csv：正式食品暴露問卷長表
+- food_2x2_primary：A4 食品粗分析輸出
+
+【這一階段的公衛問題】
+場地分層與控制共食後，哪一個效果仍然保留？
+
+【這次想完成的調查工作】
+請再用 logistic regression 同時考慮兩項食品和場地。請告訴我模型實際用了多少人、參考場地是哪裡、是否成功完成，並用 Plotly 比較粗分析、分層分析和調整後結果。
+
+【希望得到的調查成果】
+各場地原始四格與層內 OR、MH OR／95% CI、模型 n=258、收斂檢查、調整 OR／95% CI 與對照圖。
+
+如果需要圖表，可使用：場地分層 2×2 表＋Mantel–Haenszel OR＋粗／調整 OR forest plot
+畫面希望採用：先用宮苑分層表保留原始四格，再以同一 log x 軸比較粗與調整效果；圖下注明 n=258、病例 73 與參考組。
+
+【如果這一步需要畫圖】
+請使用 Plotly 製作可以互動的圖，並讓右上角可以下載 SVG。請替最後的調查報告保留這張圖；如何命名與保存由你處理，完成後告訴我即可。圖表要寫清楚分析對象與分母，中文字、日期和食品名稱保持可讀，滑鼠移到圖上時能看到這次真正使用的人數、比例或信賴區間。配色沿用米白、墨綠、朱砂紅與金色。
+
+請先閱讀上述資料與欄位說明，用白話告訴我哪些資料能回答這個問題、應使用誰作為分母，以及你準備怎麼做。確認後，再提供一格可直接在 Colab 執行的完整 Python 程式。程式內部的資料名稱與寫法由你安排；請加入繁體中文註解，完成後告訴我建立了哪些分析成果、要檢查哪些數字，以及下一步可以如何沿用。</pre><button aria-label="複製第 3 個 Prompt"><i aria-hidden="true">⧉</i>複製 Prompt</button></article></div></section><div class="reveal-stack"><details class="sealed-panel code"><summary><span>A5.4</span><div><b>講師的示範程式</b><small>完成自己的版本後展開核對；程式含註解並可直接複製到 Google Colab。</small></div><i aria-hidden="true">開封</i></summary><div class="sealed-content"><div class="code-sample"><div class="code-toolbar"><span><i aria-hidden="true">⌘</i> Python · Google Colab</span><button aria-label="複製 Python 程式"><i aria-hidden="true">⧉</i>複製程式</button></div><pre class="code-block"><code># A5.4｜先做場地分層與 MH OR，再建立多變項 logistic regression
+import numpy as np
+import pandas as pd
+import statsmodels.formula.api as smf
+from statsmodels.stats.contingency_tables import StratifiedTable
+
+# 每個場地建立相同方向的 2×2 表：列為暴露 1/0，欄為病例 1/0
+stratum_tables = []
+stratum_rows = []
+for site_id, group in analysis.groupby(&quot;site_id&quot;):
+    complete = group[[&quot;jade_dew_custard&quot;, &quot;primary&quot;]].dropna()
+    table = pd.crosstab(
+        complete[&quot;jade_dew_custard&quot;], complete[&quot;primary&quot;]
+    ).reindex(index=[1, 0], columns=[1, 0], fill_value=0)
+    values = table.to_numpy()
+    stratum_tables.append(values)
+    a, b, c, d = values.ravel()
+    # 原始四格照實輸出；層內零格只在顯示 OR 時使用 0.5 修正
+    aa, bb, cc, dd = ([a+.5, b+.5, c+.5, d+.5] if (values == 0).any() else [a, b, c, d])
+    stratum_rows.append({&quot;site_id&quot;: site_id, &quot;a&quot;: a, &quot;b&quot;: b, &quot;c&quot;: c, &quot;d&quot;: d,
+                         &quot;n&quot;: len(complete), &quot;or_display&quot;: aa*dd/(bb*cc)})
+
+mh = StratifiedTable(stratum_tables)
+mh_ci_low, mh_ci_high = mh.oddsratio_pooled_confint()
+print(pd.DataFrame(stratum_rows))
+print({&quot;mh_or&quot;: mh.oddsratio_pooled, &quot;ci_low&quot;: mh_ci_low, &quot;ci_high&quot;: mh_ci_high})
+
+# Logistic 模型分母為四個欄位都有紀錄的完整案例
+model_df = analysis[[&quot;primary&quot;, &quot;jade_dew_custard&quot;,
+                     &quot;harmony_osmanthus_drink&quot;, &quot;site_id&quot;]].dropna()
+model = smf.logit(
+    &quot;primary ~ jade_dew_custard + harmony_osmanthus_drink + C(site_id)&quot;,
+    data=model_df
+).fit()
+adjusted = pd.DataFrame({
+    &quot;or&quot;: np.exp(model.params),
+    &quot;ci_low&quot;: np.exp(model.conf_int()[0]),
+    &quot;ci_high&quot;: np.exp(model.conf_int()[1])
+})
+print(model.summary())
+print(adjusted)</code></pre></div></div></details><details class="sealed-panel demo"><summary><span>A5.5</span><div><b>講師的示範</b><small>核對講師產生的圖、表、分母與判讀檢查點。</small></div><i aria-hidden="true">開封</i></summary><div class="sealed-content"><section class="lab-panel"><div class="lab-panel-heading"><div><span class="lab-kicker">講師示範</span><h3>分層、粗分析與調整效果</h3></div><span class="denominator-chip">模型 n = 258・病例 73・已收斂</span></div><div class="stratified-summary"><div class="stratified-head"><b>場地</b><b>n</b><b>a／b／c／d</b><b>層內 OR</b></div><div><span>承月臺</span><span>94</span><code>23／40／2／29</code><strong>8.34</strong></div><div><span>蘅芳苑</span><span>82</span><code>26／26／0／30</code><strong>∞＊</strong></div><div><span>昭華殿</span><span>90</span><code>21／43／3／23</code><strong>3.74</strong></div></div><p class="stratified-note">＊蘅芳苑未暴露病例格為 0，因此原始層內 OR 為 ∞；原始四格仍完整呈現，而 Mantel–Haenszel 合併估計與主要 logistic model 仍可估計。</p><div class="estimate-path"><span>粗 OR <b>10.53</b></span><i>→</i><span>Mantel–Haenszel OR <b>9.62</b></span><i>→</i><span>Logistic 調整 OR <b>8.91</b></span></div><div class="segmented compact"><button class="selected">粗 OR</button><button class="">調整 OR</button></div><div class="forest-chart"><div class="forest-axis"><span>0.3</span><span>1</span><span>3</span><span>10</span><span>30</span></div><div class="forest-row"><span class="forest-name">翡翠凝露羹</span><div class="forest-track"><i class="null-line" style="left:26.14393726401688%"></i><i class="ci-line" style="left:56.62365772527787%;width:41.30453643582049%"></i><i class="or-dot" style="left:77.2653558232912%"></i></div><b>10.53</b></div><div class="forest-row"><span class="forest-name">合歡桂露飲</span><div class="forest-track"><i class="null-line" style="left:26.14393726401688%"></i><i class="ci-line" style="left:35.938919884478565%;width:24.847363343399813%"></i><i class="or-dot" style="left:48.34617705992069%"></i></div><b>2.78</b></div></div><div class="comparison-callout"><div><span>凝露羹</span><b>10.53 → 8.91</b><small>調整後訊號仍強</small></div><div><span>桂露飲</span><b>2.78 → 1.59</b><small>調整後 CI 包含 1</small></div></div></section></div></details><div class="advanced-topic-stack"><details class="sealed-panel advanced"><summary><span>A5.6</span><div><b>進階參數版本｜場地效應修飾與交互作用</b><small>展開查看概念、目前資料條件、需補欄位，以及擴充後可用的 Prompt 與程式。</small></div><i aria-hidden="true">開封</i></summary><div class="sealed-content"><div class="advanced-topic"><div class="advanced-topic-intro"><article><small>分析概念</small><p>檢查同一食品的效果是否因場地而改變，而不只是把場地視為需要控制的混雜因子。</p></article><article><small>目前資料條件</small><p>目前一個場地的未暴露病例格數為 0，各層估計偏稀疏；標準 DGP 也沒有設定食品效果會因場地改變。</p></article></div><div class="advanced-requirements"><article><small>目前缺少</small><ul><li>各場地足夠的暴露與未暴露病例</li><li>預先設定的場地×食品效果</li><li>較大的參與人數</li></ul></article><article><small>擴充資料需加入</small><div><code>site_food_interaction</code><code>minimum_cell_count</code><code>interaction_effect_size</code></div></article></div><section class="advanced-prompt"><small>擴充後推薦 Prompt</small><article class="prompt-card"><span>01</span><pre>這是混雜加強版資料，DGP 已設定不同 site_id 的 jade_dew_custard 效果不同，且各層四格至少 5 人。請先輸出場地分層 2×2 表與 OR，再建立 primary ~ jade_dew_custard * C(site_id) + harmony_osmanthus_drink。輸出交互作用係數、各場地推導 OR、95% CI、模型分母與收斂狀態，並以 interaction plot 呈現。
+
+【進階圖表與 SVG 規格】
+- 優先使用 Plotly，並以 toImageButtonOptions 將工具列下載格式設為 SVG。
+- 若 lifelines、networkx 或其他套件的必要功能只能透過 Matplotlib 呈現，必須另外使用 savefig(..., format=&quot;svg&quot;, bbox_inches=&quot;tight&quot;) 輸出 SVG，並在程式輸出清楚顯示檔名。
+- 圖表須保留分母、事件數、設限數或網絡邊的判定依據；視覺規格沿用米白、墨綠、朱砂紅與金色。</pre><button aria-label="複製第 1 個 Prompt"><i aria-hidden="true">⧉</i>複製 Prompt</button></article></section><section class="advanced-code"><small>擴充後講師程式</small><div class="code-sample"><div class="code-toolbar"><span><i aria-hidden="true">⌘</i> Python · Google Colab</span><button aria-label="複製 Python 程式"><i aria-hidden="true">⧉</i>複製程式</button></div><pre class="code-block"><code># A5.6｜只在進階 DGP 提供足夠層內樣本與交互作用時使用
+import numpy as np
+import pandas as pd
+import statsmodels.formula.api as smf
+
+required = {&quot;primary&quot;, &quot;jade_dew_custard&quot;, &quot;harmony_osmanthus_drink&quot;, &quot;site_id&quot;}
+if required.difference(analysis.columns):
+    raise ValueError(&quot;進階交互作用模型尚缺必要欄位&quot;)
+
+model_df = analysis[list(required)].dropna()
+interaction_model = smf.logit(
+    &quot;primary ~ jade_dew_custard * C(site_id) + harmony_osmanthus_drink&quot;,
+    data=model_df
+).fit()
+print(interaction_model.summary())
+# 下一步依係數組合推導各 site 的食品 OR 與 95% CI
+print(np.exp(interaction_model.params))</code></pre></div></section></div></div></details></div></div></div><div class="chapter-transition"><span>下一階段</span><p>調整後翡翠凝露羹保留強訊號；下一卷檢查問卷缺失假設是否改變方向。</p><strong>進入「<!-- -->缺失挑戰<!-- -->」</strong></div></article><article class="story-chapter " id="chapter-6"><header class="chapter-header"><div class="chapter-number"><small>案卷</small><strong>A<!-- -->6</strong></div><div class="chapter-copy"><span class="chapter-time">翌日 11:15・調查會議提出質疑</span><h2>以三個缺失情境檢查結果穩健性</h2><p>部分食品題目記錄為 unknown。調查小組設定完整案例、未知視為未食用、未知視為食用三個透明假設。</p><blockquote><b>此刻要回答：</b>在不同缺失假設下，主要候選食品的效果方向是否一致？</blockquote></div></header><div class="lesson-stack"><section class="cause-panel"><div class="lesson-subhead"><span>A<!-- -->6<!-- -->.1</span><div><b>目前取得的資料與下一步</b><p>先確認資料從哪裡來、為什麼此刻出現，再展開查看實際內容。</p></div></div><div class="current-source-list"><article class="current-source-card"><header><div><span>目前取得</span><h3>正式食品暴露問卷長表</h3></div><code>food_exposure.csv</code></header><div class="source-context-grid"><div><small>從哪裡來</small><p>依早期訪談與菜單設計標準問卷，再以參與者訪談和可用供餐紀錄完成。</p></div><div><small>為什麼此刻取得</small><p>為每項食品建立食用／未食用／未知紀錄，才能計算食品別侵襲率、2×2 表、OR 與共食關係。</p></div><div><small>本幕要做的圖／輸出</small><p>三情境 OR 與 95% CI 對照圖</p></div></div><p class="source-unit"><b>一列代表什麼：</b>一列是一名參與者×一項食品；共 3,120 列，預覽前 10 列。</p><details class="source-preview"><summary><span>預覽資料內容</span><small>展開</small></summary><p class="source-preview-state">正在讀取資料預覽…</p></details></article><article class="current-source-card"><header><div><span>目前取得</span><h3>個人層級 Line List</h3></div><code>person_line_list.csv</code></header><div class="source-context-grid"><div><small>從哪裡來</small><p>主辦單位的 312 人與會名冊，與調查人員第一輪主動訪談、症狀時間及採檢狀態合併而成。</p></div><div><small>為什麼此刻取得</small><p>建立完整事件分母，並讓每名參與者都能依同一套規則分類病例及描述 Person／Time／Place。</p></div><div><small>本幕要做的圖／輸出</small><p>三情境 OR 與 95% CI 對照圖</p></div></div><p class="source-unit"><b>一列代表什麼：</b>一列是一名參與者；共 312 列，預覽前 10 列。</p><details class="source-preview"><summary><span>預覽資料內容</span><small>展開</small></summary><p class="source-preview-state">正在讀取資料預覽…</p></details></article><article class="current-source-card"><header><div><span>目前取得</span><h3>A5 分層與調整模型輸出</h3></div><code>adjusted_effect_summary</code></header><div class="source-context-grid"><div><small>從哪裡來</small><p>A5 將場地分層 2×2、Mantel–Haenszel 與 logistic regression 結果整理後產生。</p></div><div><small>為什麼此刻取得</small><p>作為 A6 缺失值敏感度分析的基準，檢查不同未知暴露假設是否改變主要效果方向。</p></div><div><small>本幕要做的圖／輸出</small><p>三情境 OR 與 95% CI 對照圖</p></div></div><p class="source-unit"><b>一列代表什麼：</b>分析衍生摘要；完整顯示三種估計。</p><details class="source-preview"><summary><span>預覽資料內容</span><small>展開</small></summary><div class="source-table-shell"><div class="source-table-note"><span>顯示全部 3 列</span><small>可左右捲動查看完整欄位</small></div><div class="source-table-scroll"><table><thead><tr><th>estimate</th><th>jade_dew_OR</th><th>interpretation</th></tr></thead><tbody><tr><td>crude</td><td>10.53</td><td>未調整</td></tr><tr><td>Mantel–Haenszel</td><td>9.62</td><td>依場地分層</td></tr><tr><td>logistic adjusted</td><td>8.91</td><td>控制共食與場地</td></tr></tbody></table></div></div></details></article></div><blockquote class="analysis-direction"><b>接下來的分析方向</b><p>三個情境共用同一份病例分類，只改變未知暴露的編碼，再比較分母、OR 與 95% CI。</p></blockquote></section><section class="analysis-brief"><div class="lesson-subhead"><span>A6.2</span><div><b>下一步要做的圖與分析</b><p>把資料表、分母、產出與判讀範圍寫成分析規格。</p></div></div><div class="analysis-spec-grid"><article><small>圖表／輸出</small><strong>三情境 OR 與 95% CI 對照圖</strong></article><article><small>資料表</small><strong>food_exposure.csv、person_line_list.csv</strong></article><article><small>分母</small><strong>完整案例採已知暴露者；兩個極端情境採病例狀態已知者</strong></article><article class="wide"><small>可以回答</small><p>觀察效果方向與估計幅度對極端缺失假設的敏感程度。</p></article><article class="wide next-scope"><small>後續接續</small><p>以問卷回覆模式與調查設計描述剩餘偏差，再整合人體、食品與環境證據。</p></article></div></section><section class="prompt-sequence"><div class="lesson-subhead"><span>A6.3</span><div><b>推薦 Prompt</b><p>用一般人的方式說明手上的資料與想回答的問題，可直接貼給 Gemini。</p></div></div><div class="prompt-brief-grid"><article><small>現有資料與檔名</small><p>food_exposure.csv：正式食品暴露問卷長表、person_line_list.csv：個人層級 Line List、adjusted_effect_summary：A5 分層與調整模型輸出</p></article><article><small>要探討的問題</small><p>在不同缺失假設下，主要候選食品的效果方向是否一致？</p></article><article><small>預計圖表</small><p>三情境 OR 與 95% CI 對照圖</p></article><article><small>預期呈現</small><p>三情境假設表、分析分母、原始四格、OR、95% CI 與方向一致性摘要。</p></article><article class="wide"><small>視覺指示</small><p>三列點線圖共用 log x 軸；完整案例用朱砂紅，兩個極端情境用金色與墨綠；每列直接標示 n。</p></article></div><div class="prompt-list"><article class="prompt-card"><span>01</span><pre>我是負責這場群聚事件的公衛調查學員，目前還不會自己寫 Python。
+
+【目前取得的調查資料】
+- food_exposure.csv：正式食品暴露問卷長表
+- person_line_list.csv：個人層級 Line List
+- adjusted_effect_summary：A5 分層與調整模型輸出
+
+【這一階段的公衛問題】
+在不同缺失假設下，主要候選食品的效果方向是否一致？
+
+【這次想完成的調查工作】
+主要候選食品仍有一些未知回答。請先用白話解釋三種看法：只分析有回答的人、把未知都當作沒吃、把未知都當作有吃。
+
+【希望得到的調查成果】
+三情境假設表、分析分母、原始四格、OR、95% CI 與方向一致性摘要。
+
+如果需要圖表，可使用：三情境 OR 與 95% CI 對照圖
+畫面希望採用：三列點線圖共用 log x 軸；完整案例用朱砂紅，兩個極端情境用金色與墨綠；每列直接標示 n。
+
+【如果這一步需要畫圖】
+請使用 Plotly 製作可以互動的圖，並讓右上角可以下載 SVG。請替最後的調查報告保留這張圖；如何命名與保存由你處理，完成後告訴我即可。圖表要寫清楚分析對象與分母，中文字、日期和食品名稱保持可讀，滑鼠移到圖上時能看到這次真正使用的人數、比例或信賴區間。配色沿用米白、墨綠、朱砂紅與金色。
+
+請先閱讀上述資料與欄位說明，用白話告訴我哪些資料能回答這個問題、應使用誰作為分母，以及你準備怎麼做。確認後，再提供一格可直接在 Colab 執行的完整 Python 程式。程式內部的資料名稱與寫法由你安排；請加入繁體中文註解，完成後告訴我建立了哪些分析成果、要檢查哪些數字，以及下一步可以如何沿用。</pre><button aria-label="複製第 1 個 Prompt"><i aria-hidden="true">⧉</i>複製 Prompt</button></article><article class="prompt-card"><span>02</span><pre>我是負責這場群聚事件的公衛調查學員，目前還不會自己寫 Python。
+
+【目前取得的調查資料】
+- food_exposure.csv：正式食品暴露問卷長表
+- person_line_list.csv：個人層級 Line List
+- adjusted_effect_summary：A5 分層與調整模型輸出
+
+【這一階段的公衛問題】
+在不同缺失假設下，主要候選食品的效果方向是否一致？
+
+【這次想完成的調查工作】
+請在三種看法下重新比較候選食品與發病，列出每次使用的人數、四格人數、OR 和 95% 信賴區間，再用 Plotly 畫在同一張圖上。
+
+【希望得到的調查成果】
+三情境假設表、分析分母、原始四格、OR、95% CI 與方向一致性摘要。
+
+如果需要圖表，可使用：三情境 OR 與 95% CI 對照圖
+畫面希望採用：三列點線圖共用 log x 軸；完整案例用朱砂紅，兩個極端情境用金色與墨綠；每列直接標示 n。
+
+【如果這一步需要畫圖】
+請使用 Plotly 製作可以互動的圖，並讓右上角可以下載 SVG。請替最後的調查報告保留這張圖；如何命名與保存由你處理，完成後告訴我即可。圖表要寫清楚分析對象與分母，中文字、日期和食品名稱保持可讀，滑鼠移到圖上時能看到這次真正使用的人數、比例或信賴區間。配色沿用米白、墨綠、朱砂紅與金色。
+
+請先閱讀上述資料與欄位說明，用白話告訴我哪些資料能回答這個問題、應使用誰作為分母，以及你準備怎麼做。確認後，再提供一格可直接在 Colab 執行的完整 Python 程式。程式內部的資料名稱與寫法由你安排；請加入繁體中文註解，完成後告訴我建立了哪些分析成果、要檢查哪些數字，以及下一步可以如何沿用。</pre><button aria-label="複製第 2 個 Prompt"><i aria-hidden="true">⧉</i>複製 Prompt</button></article><article class="prompt-card"><span>03</span><pre>我是負責這場群聚事件的公衛調查學員，目前還不會自己寫 Python。
+
+【目前取得的調查資料】
+- food_exposure.csv：正式食品暴露問卷長表
+- person_line_list.csv：個人層級 Line List
+- adjusted_effect_summary：A5 分層與調整模型輸出
+
+【這一階段的公衛問題】
+在不同缺失假設下，主要候選食品的效果方向是否一致？
+
+【這次想完成的調查工作】
+請告訴我三種結果的方向是否一致、這對結果穩健性代表什麼；再提醒我回覆偏差、回憶偏差和未測量混雜還需要如何判讀。
+
+【希望得到的調查成果】
+三情境假設表、分析分母、原始四格、OR、95% CI 與方向一致性摘要。
+
+如果需要圖表，可使用：三情境 OR 與 95% CI 對照圖
+畫面希望採用：三列點線圖共用 log x 軸；完整案例用朱砂紅，兩個極端情境用金色與墨綠；每列直接標示 n。
+
+【如果這一步需要畫圖】
+請使用 Plotly 製作可以互動的圖，並讓右上角可以下載 SVG。請替最後的調查報告保留這張圖；如何命名與保存由你處理，完成後告訴我即可。圖表要寫清楚分析對象與分母，中文字、日期和食品名稱保持可讀，滑鼠移到圖上時能看到這次真正使用的人數、比例或信賴區間。配色沿用米白、墨綠、朱砂紅與金色。
+
+請先閱讀上述資料與欄位說明，用白話告訴我哪些資料能回答這個問題、應使用誰作為分母，以及你準備怎麼做。確認後，再提供一格可直接在 Colab 執行的完整 Python 程式。程式內部的資料名稱與寫法由你安排；請加入繁體中文註解，完成後告訴我建立了哪些分析成果、要檢查哪些數字，以及下一步可以如何沿用。</pre><button aria-label="複製第 3 個 Prompt"><i aria-hidden="true">⧉</i>複製 Prompt</button></article></div></section><div class="reveal-stack"><details class="sealed-panel code"><summary><span>A6.4</span><div><b>講師的示範程式</b><small>完成自己的版本後展開核對；程式含註解並可直接複製到 Google Colab。</small></div><i aria-hidden="true">開封</i></summary><div class="sealed-content"><div class="code-sample"><div class="code-toolbar"><span><i aria-hidden="true">⌘</i> Python · Google Colab</span><button aria-label="複製 Python 程式"><i aria-hidden="true">⧉</i>複製程式</button></div><pre class="code-block"><code># 6.4｜固定病例分類，只改變未知暴露的三種假設
+import pandas as pd
+
+exposure = analysis[&quot;jade_dew_custard&quot;]
+scenarios = {
+    &quot;complete_case&quot;: exposure,
+    &quot;unknown_as_unexposed&quot;: exposure.fillna(0),
+    &quot;unknown_as_exposed&quot;: exposure.fillna(1),
+}
+rows = []
+for name, scenario_exposure in scenarios.items():
+    temp = analysis.assign(scenario_exposure=scenario_exposure)
+    rows.append({&quot;scenario&quot;: name, **two_by_two(temp, &quot;scenario_exposure&quot;)})
+sensitivity_results = pd.DataFrame(rows)
+print(sensitivity_results)</code></pre></div></div></details><details class="sealed-panel demo"><summary><span>A6.5</span><div><b>講師的示範</b><small>核對講師產生的圖、表、分母與判讀檢查點。</small></div><i aria-hidden="true">開封</i></summary><div class="sealed-content"><section class="lab-panel"><div class="lab-panel-heading"><div><span class="lab-kicker">講師示範</span><h3>暴露缺失敏感度</h3></div><span class="denominator-chip">固定病例・改變暴露假設</span></div><div class="missing-scenario-list"><button class="selected"><span>完整案例</span><small>只分析暴露已知者</small></button><button class=""><span>未知→未食用</span><small>未知暴露全視為 0</small></button><button class=""><span>未知→食用</span><small>未知暴露全視為 1</small></button></div><div class="missing-result"><div><span>分析分母</span><strong>266</strong></div><div><span>OR</span><strong>10.53</strong></div><div><span>95% CI</span><strong>4.07–27.27</strong></div></div><p class="validation-note"><b>講師判讀：</b>三種暴露假設下方向一致，支持結果的缺失值穩健性；回覆模式與調查設計將承接偏差評估。</p></section></div></details></div></div><div class="chapter-transition"><span>下一階段</span><p>觀察性證據指向主要候選食品；最後一卷整合人體檢驗、食品檢體與環境紀錄。</p><strong>進入「<!-- -->證據整合<!-- -->」</strong></div></article><article class="story-chapter alternate" id="chapter-7"><header class="chapter-header"><div class="chapter-number"><small>案卷</small><strong>A<!-- -->7</strong></div><div class="chapter-copy"><span class="chapter-time">翌日午後・檢驗與環境案卷送達</span><h2>分四層整合檢驗與環境證據</h2><p>人體檢體先送達，食品與環境結果隨後補上。每筆 detected、not_detected 與環境發現依手冊進入相應證據層級。</p><blockquote><b>此刻要回答：</b>哪些證據確認疾病身分、支持食品媒介，或屬於背景環境發現？</blockquote></div></header><div class="lesson-stack"><section class="cause-panel"><div class="lesson-subhead"><span>A<!-- -->7<!-- -->.1</span><div><b>目前取得的資料與下一步</b><p>先確認資料從哪裡來、為什麼此刻出現，再展開查看實際內容。</p></div></div><div class="current-source-list"><article class="current-source-card"><header><div><span>目前取得</span><h3>人體與食品檢驗結果</h3></div><code>lab_results.csv</code></header><div class="source-context-grid"><div><small>從哪裡來</small><p>御醫署實驗室對病例檢體、剩餘食品與指定環境樣本完成 YL-NAAT、培養與分型後回報。</p></div><div><small>為什麼此刻取得</small><p>分開判定檢驗結果、個案分類、群聚病因與食品媒介，並結合採檢時機解讀陰性。</p></div><div><small>本幕要做的圖／輸出</small><p>四層證據表＋人體／食品／環境三角驗證圖</p></div></div><p class="source-unit"><b>一列代表什麼：</b>一列是一個樣本的一項檢驗；共 63 列，完整顯示。</p><details class="source-preview"><summary><span>預覽資料內容</span><small>展開</small></summary><p class="source-preview-state">正在讀取資料預覽…</p></details></article><article class="current-source-card"><header><div><span>目前取得</span><h3>食品溫度與環境紀錄</h3></div><code>environment_log.csv</code></header><div class="source-context-grid"><div><small>從哪裡來</small><p>尚膳署既有溫度表、供餐紀錄與調查人員現場查核結果合併而成。</p></div><div><small>為什麼此刻取得</small><p>把食品、批次、溫度與保存時間串起來，檢查哪條供餐路徑符合手冊定義的繁殖條件。</p></div><div><small>本幕要做的圖／輸出</small><p>四層證據表＋人體／食品／環境三角驗證圖</p></div></div><p class="source-unit"><b>一列代表什麼：</b>一列是一筆環境或食品保存紀錄；共 24 列，完整顯示。</p><details class="source-preview"><summary><span>預覽資料內容</span><small>展開</small></summary><p class="source-preview-state">正在讀取資料預覽…</p></details></article><article class="current-source-card"><header><div><span>目前取得</span><h3>金玉良炎防治工作手冊</h3></div><code>disease_field_manual.md</code></header><div class="source-context-grid"><div><small>從哪裡來</small><p>御醫署在本次千秋宴之前已發布的正式疾病手冊，是承熙國既有公衛知識。</p></div><div><small>為什麼此刻取得</small><p>提供群聚門檻、病例定義、潛伏期、採檢時機與證據判讀規則，讓分析條件在看結果前固定。</p></div><div><small>本幕要做的圖／輸出</small><p>四層證據表＋人體／食品／環境三角驗證圖</p></div></div><p class="source-unit"><b>一列代表什麼：</b>Markdown 規則文件；預覽時顯示全文。</p><details class="source-preview"><summary><span>預覽資料內容</span><small>展開</small></summary><p class="source-preview-state">正在讀取資料預覽…</p></details></article><article class="current-source-card"><header><div><span>目前取得</span><h3>A5 分層與調整模型輸出</h3></div><code>adjusted_effect_summary</code></header><div class="source-context-grid"><div><small>從哪裡來</small><p>A5 將場地分層 2×2、Mantel–Haenszel 與 logistic regression 結果整理後產生。</p></div><div><small>為什麼此刻取得</small><p>作為 A6 缺失值敏感度分析的基準，檢查不同未知暴露假設是否改變主要效果方向。</p></div><div><small>本幕要做的圖／輸出</small><p>四層證據表＋人體／食品／環境三角驗證圖</p></div></div><p class="source-unit"><b>一列代表什麼：</b>分析衍生摘要；完整顯示三種估計。</p><details class="source-preview"><summary><span>預覽資料內容</span><small>展開</small></summary><div class="source-table-shell"><div class="source-table-note"><span>顯示全部 3 列</span><small>可左右捲動查看完整欄位</small></div><div class="source-table-scroll"><table><thead><tr><th>estimate</th><th>jade_dew_OR</th><th>interpretation</th></tr></thead><tbody><tr><td>crude</td><td>10.53</td><td>未調整</td></tr><tr><td>Mantel–Haenszel</td><td>9.62</td><td>依場地分層</td></tr><tr><td>logistic adjusted</td><td>8.91</td><td>控制共食與場地</td></tr></tbody></table></div></div></details></article></div><blockquote class="analysis-direction"><b>接下來的分析方向</b><p>保留原始檢驗值與採檢時機：人體 YL-NAAT 27／28 陽性、YL-Culture 16／20 陽性；三處宮苑的凝露羹食品培養皆檢出相符 YL-4，再分層判定結果。</p></blockquote></section><section class="analysis-brief"><div class="lesson-subhead"><span>A7.2</span><div><b>下一步要做的圖與分析</b><p>把資料表、分母、產出與判讀範圍寫成分析規格。</p></div></div><div class="analysis-spec-grid"><article><small>圖表／輸出</small><strong>四層證據表＋人體／食品／環境三角驗證圖</strong></article><article><small>資料表</small><strong>lab_results.csv、environment_log.csv 與前階段分析表</strong></article><article><small>分母</small><strong>YL-NAAT 28 次、YL-Culture 20 次；三場地食品樣本與各場地暴露分母分開報告</strong></article><article class="wide"><small>可以回答</small><p>判定個案與群聚病因，並評估凝露羹媒介證據和統計、分型、候膳溫度與時間是否一致；P. innocua 僅列背景發現。</p></article><article class="wide next-scope"><small>後續接續</small><p>將固定分析結果先輸出 publication PNG／SVG、Word 與列印 PDF，最後再建立互動 HTML 延伸。</p></article></div></section><section class="prompt-sequence"><div class="lesson-subhead"><span>A7.3</span><div><b>推薦 Prompt</b><p>用一般人的方式說明手上的資料與想回答的問題，可直接貼給 Gemini。</p></div></div><div class="prompt-brief-grid"><article><small>現有資料與檔名</small><p>lab_results.csv：人體與食品檢驗結果、environment_log.csv：食品溫度與環境紀錄、disease_field_manual.md：金玉良炎防治工作手冊、adjusted_effect_summary：A5 分層與調整模型輸出</p></article><article><small>要探討的問題</small><p>哪些證據確認疾病身分、支持食品媒介，或屬於背景環境發現？</p></article><article><small>預計圖表</small><p>四層證據表＋人體／食品／環境三角驗證圖</p></article><article><small>預期呈現</small><p>分時段檢驗陽性數／檢驗數、採檢時機、四層證據表、三場地凝露羹 YL-4 結果與環境三角驗證。</p></article><article class="wide"><small>視覺指示</small><p>以人體、食品、環境三欄排版；detected 用朱砂紅，supporting 用墨綠，背景發現用灰金；每欄直接標示樣本分母。</p></article></div><div class="prompt-list"><article class="prompt-card"><span>01</span><pre>我是負責這場群聚事件的公衛調查學員，目前還不會自己寫 Python。
+
+【目前取得的調查資料】
+- lab_results.csv：人體與食品檢驗結果
+- environment_log.csv：食品溫度與環境紀錄
+- disease_field_manual.md：金玉良炎防治工作手冊
+- adjusted_effect_summary：A5 分層與調整模型輸出
+
+【這一階段的公衛問題】
+哪些證據確認疾病身分、支持食品媒介，或屬於背景環境發現？
+
+【這次想完成的調查工作】
+請先把人體檢驗和病例資料接在一起，保留原始檢驗結果與採檢時間。請用白話說明一筆陽性或陰性檢驗目前可以代表什麼。
+
+【希望得到的調查成果】
+分時段檢驗陽性數／檢驗數、採檢時機、四層證據表、三場地凝露羹 YL-4 結果與環境三角驗證。
+
+如果需要圖表，可使用：四層證據表＋人體／食品／環境三角驗證圖
+畫面希望採用：以人體、食品、環境三欄排版；detected 用朱砂紅，supporting 用墨綠，背景發現用灰金；每欄直接標示樣本分母。
+
+【如果這一步需要畫圖】
+請使用 Plotly 製作可以互動的圖，並讓右上角可以下載 SVG。請替最後的調查報告保留這張圖；如何命名與保存由你處理，完成後告訴我即可。圖表要寫清楚分析對象與分母，中文字、日期和食品名稱保持可讀，滑鼠移到圖上時能看到這次真正使用的人數、比例或信賴區間。配色沿用米白、墨綠、朱砂紅與金色。
+
+請先閱讀上述資料與欄位說明，用白話告訴我哪些資料能回答這個問題、應使用誰作為分母，以及你準備怎麼做。確認後，再提供一格可直接在 Colab 執行的完整 Python 程式。程式內部的資料名稱與寫法由你安排；請加入繁體中文註解，完成後告訴我建立了哪些分析成果、要檢查哪些數字，以及下一步可以如何沿用。</pre><button aria-label="複製第 1 個 Prompt"><i aria-hidden="true">⧉</i>複製 Prompt</button></article><article class="prompt-card"><span>02</span><pre>我是負責這場群聚事件的公衛調查學員，目前還不會自己寫 Python。
+
+【目前取得的調查資料】
+- lab_results.csv：人體與食品檢驗結果
+- environment_log.csv：食品溫度與環境紀錄
+- disease_field_manual.md：金玉良炎防治工作手冊
+- adjusted_effect_summary：A5 分層與調整模型輸出
+
+【這一階段的公衛問題】
+哪些證據確認疾病身分、支持食品媒介，或屬於背景環境發現？
+
+【這次想完成的調查工作】
+請依工作手冊和採檢時機判讀個案。較晚採檢的陰性結果請保留其不確定性，並說明為什麼不會自動把原本的臨床病例改成沒有生病。
+
+【希望得到的調查成果】
+分時段檢驗陽性數／檢驗數、採檢時機、四層證據表、三場地凝露羹 YL-4 結果與環境三角驗證。
+
+如果需要圖表，可使用：四層證據表＋人體／食品／環境三角驗證圖
+畫面希望採用：以人體、食品、環境三欄排版；detected 用朱砂紅，supporting 用墨綠，背景發現用灰金；每欄直接標示樣本分母。
+
+【如果這一步需要畫圖】
+請使用 Plotly 製作可以互動的圖，並讓右上角可以下載 SVG。請替最後的調查報告保留這張圖；如何命名與保存由你處理，完成後告訴我即可。圖表要寫清楚分析對象與分母，中文字、日期和食品名稱保持可讀，滑鼠移到圖上時能看到這次真正使用的人數、比例或信賴區間。配色沿用米白、墨綠、朱砂紅與金色。
+
+請先閱讀上述資料與欄位說明，用白話告訴我哪些資料能回答這個問題、應使用誰作為分母，以及你準備怎麼做。確認後，再提供一格可直接在 Colab 執行的完整 Python 程式。程式內部的資料名稱與寫法由你安排；請加入繁體中文註解，完成後告訴我建立了哪些分析成果、要檢查哪些數字，以及下一步可以如何沿用。</pre><button aria-label="複製第 2 個 Prompt"><i aria-hidden="true">⧉</i>複製 Prompt</button></article><article class="prompt-card"><span>03</span><pre>我是負責這場群聚事件的公衛調查學員，目前還不會自己寫 Python。
+
+【目前取得的調查資料】
+- lab_results.csv：人體與食品檢驗結果
+- environment_log.csv：食品溫度與環境紀錄
+- disease_field_manual.md：金玉良炎防治工作手冊
+- adjusted_effect_summary：A5 分層與調整模型輸出
+
+【這一階段的公衛問題】
+哪些證據確認疾病身分、支持食品媒介，或屬於背景環境發現？
+
+【這次想完成的調查工作】
+請把結論分成檢驗結果、個案分類、群聚病因和食品媒介四層，再用 Plotly 整合人體、食品和環境線索。Petalomyces innocua 請依手冊列為背景環境發現。
+
+【希望得到的調查成果】
+分時段檢驗陽性數／檢驗數、採檢時機、四層證據表、三場地凝露羹 YL-4 結果與環境三角驗證。
+
+如果需要圖表，可使用：四層證據表＋人體／食品／環境三角驗證圖
+畫面希望採用：以人體、食品、環境三欄排版；detected 用朱砂紅，supporting 用墨綠，背景發現用灰金；每欄直接標示樣本分母。
+
+【如果這一步需要畫圖】
+請使用 Plotly 製作可以互動的圖，並讓右上角可以下載 SVG。請替最後的調查報告保留這張圖；如何命名與保存由你處理，完成後告訴我即可。圖表要寫清楚分析對象與分母，中文字、日期和食品名稱保持可讀，滑鼠移到圖上時能看到這次真正使用的人數、比例或信賴區間。配色沿用米白、墨綠、朱砂紅與金色。
+
+請先閱讀上述資料與欄位說明，用白話告訴我哪些資料能回答這個問題、應使用誰作為分母，以及你準備怎麼做。確認後，再提供一格可直接在 Colab 執行的完整 Python 程式。程式內部的資料名稱與寫法由你安排；請加入繁體中文註解，完成後告訴我建立了哪些分析成果、要檢查哪些數字，以及下一步可以如何沿用。</pre><button aria-label="複製第 3 個 Prompt"><i aria-hidden="true">⧉</i>複製 Prompt</button></article></div></section><div class="reveal-stack"><details class="sealed-panel code"><summary><span>A7.4</span><div><b>講師的示範程式</b><small>完成自己的版本後展開核對；程式含註解並可直接複製到 Google Colab。</small></div><i aria-hidden="true">開封</i></summary><div class="sealed-content"><div class="code-sample"><div class="code-toolbar"><span><i aria-hidden="true">⌘</i> Python · Google Colab</span><button aria-label="複製 Python 程式"><i aria-hidden="true">⧉</i>複製程式</button></div><pre class="code-block"><code># A7.4｜保留原始檢驗結果，建立採檢時機與證據層級欄位
+import pandas as pd
+
+line_list = pd.read_csv(&quot;person_line_list.csv&quot;, parse_dates=[&quot;symptom_onset_datetime&quot;])
+lab = pd.read_csv(&quot;lab_results.csv&quot;, parse_dates=[&quot;specimen_datetime&quot;])
+evidence = line_list.merge(lab, on=&quot;person_id&quot;, how=&quot;left&quot;, validate=&quot;one_to_many&quot;)
+evidence[&quot;hours_onset_to_specimen&quot;] = (
+    evidence[&quot;specimen_datetime&quot;] - evidence[&quot;symptom_onset_datetime&quot;]
+).dt.total_seconds() / 3600
+# test_result 保留 detected / not_detected / invalid / pending / not_tested
+# 依手冊規則另建 case_classification_after_lab，原始結果可供稽核
+print(evidence[[&quot;person_id&quot;, &quot;test_result&quot;, &quot;hours_onset_to_specimen&quot;]].head())</code></pre></div></div></details><details class="sealed-panel demo"><summary><span>A7.5</span><div><b>講師的示範</b><small>核對講師產生的圖、表、分母與判讀檢查點。</small></div><i aria-hidden="true">開封</i></summary><div class="sealed-content"><div class="evidence-demo"><div class="release-controls light-controls"><button class="open"><b>1</b><span>名冊與暴露</span></button><button class="open"><b>2</b><span>人體檢驗</span></button><button class=""><b>3</b><span>食品與環境</span></button></div><div class="lab-result-strip"><div><span>YL-NAAT</span><b>27 / 28</b><small>陽性檢驗／檢驗數</small></div><div><span>YL-Culture</span><b>16 / 20</b><small>陽性檢驗／檢驗數</small></div><div><span>食品培養</span><b>3 / 3 場地</b><small>凝露羹皆為 YL-4</small></div></div><div class="evidence-table"><article><span>人體檢體</span><b>多名臨床病例 YL-NAAT detected</b><p>支持群聚病因</p></article><article><span>延遲採檢</span><b>一名病例 YL-NAAT not_detected</b><p>保留病例分類並標記採檢時機</p></article></div><div class="evidence-levels"><div><small>① 檢驗結果</small><b>detected／not detected</b></div><div><small>② 個案分類</small><b>probable／confirmed</b></div><div><small>③ 群聚病因</small><b>是否確認金玉良炎</b></div><div><small>④ 食品媒介</small><b>是否確認原因食品</b></div></div></div></div></details><div class="advanced-topic-stack"><details class="sealed-panel advanced"><summary><span>A7.6</span><div><b>進階參數版本｜二次傳播網絡</b><small>展開查看概念、目前資料條件、需補欄位，以及擴充後可用的 Prompt 與程式。</small></div><i aria-hidden="true">開封</i></summary><div class="sealed-content"><div class="advanced-topic"><div class="advanced-topic-intro"><article><small>分析概念</small><p>用接觸關係、發病先後與合理代間距，區分共同食源病例與少量可能的二次病例。</p></article><article><small>目前資料條件</small><p>標準版只有個人症狀與宴會暴露，沒有病例間接觸紀錄、可能感染來源與接觸時間。</p></article></div><div class="advanced-requirements"><article><small>目前缺少</small><ul><li>病例間接觸對象</li><li>接觸開始與結束時間</li><li>可能來源與代間距</li></ul></article><article><small>擴充資料需加入</small><div><code>source_person_id</code><code>contact_person_id</code><code>contact_start_datetime</code><code>contact_end_datetime</code><code>contact_type</code><code>generation_interval_hours</code></div></article></div><section class="advanced-prompt"><small>擴充後推薦 Prompt</small><article class="prompt-card"><span>01</span><pre>我有 contact_history.csv 與 person_line_list.csv。前者包含 source_person_id、contact_person_id、contact_start_datetime、contact_end_datetime、contact_type；後者包含 primary 與 symptom_onset_datetime。請先依手冊的合理代間距篩選可能傳播邊，再用 networkx 畫有向網絡：共同食源病例用朱砂紅、可能二次病例用金色、接觸邊標示時間。請輸出每條邊的判定依據與不確定性。
+
+【進階圖表與 SVG 規格】
+- 優先使用 Plotly，並以 toImageButtonOptions 將工具列下載格式設為 SVG。
+- 若 lifelines、networkx 或其他套件的必要功能只能透過 Matplotlib 呈現，必須另外使用 savefig(..., format=&quot;svg&quot;, bbox_inches=&quot;tight&quot;) 輸出 SVG，並在程式輸出清楚顯示檔名。
+- 圖表須保留分母、事件數、設限數或網絡邊的判定依據；視覺規格沿用米白、墨綠、朱砂紅與金色。</pre><button aria-label="複製第 1 個 Prompt"><i aria-hidden="true">⧉</i>複製 Prompt</button></article></section><section class="advanced-code"><small>擴充後講師程式</small><div class="code-sample"><div class="code-toolbar"><span><i aria-hidden="true">⌘</i> Python · Google Colab</span><button aria-label="複製 Python 程式"><i aria-hidden="true">⧉</i>複製程式</button></div><pre class="code-block"><code># A7.6｜需先有個人接觸史與可能代間距
+import pandas as pd
+import networkx as nx
+import matplotlib.pyplot as plt
+
+contacts = pd.read_csv(&quot;contact_history.csv&quot;, parse_dates=[
+    &quot;contact_start_datetime&quot;, &quot;contact_end_datetime&quot;
+])
+required = {&quot;source_person_id&quot;, &quot;contact_person_id&quot;,
+            &quot;contact_start_datetime&quot;, &quot;contact_end_datetime&quot;}
+if required.difference(contacts.columns):
+    raise ValueError(&quot;進階傳播網絡尚缺接觸對象與接觸時間&quot;)
+
+# 篩選步驟還需合併兩人的發病時間與手冊代間距
+G = nx.from_pandas_edgelist(
+    contacts, &quot;source_person_id&quot;, &quot;contact_person_id&quot;, create_using=nx.DiGraph
+)
+nx.draw_networkx(G, node_size=260, arrows=True, with_labels=False)
+plt.title(&quot;Possible secondary transmission network&quot;)
+plt.axis(&quot;off&quot;)
+plt.savefig(&quot;secondary_transmission_network.svg&quot;, format=&quot;svg&quot;, bbox_inches=&quot;tight&quot;)
+print(&quot;SVG: secondary_transmission_network.svg&quot;)
+plt.show()</code></pre></div></section></div></div></details></div></div></div><div class="chapter-transition"><span>下一階段</span><p>先交付 publication 圖、Word 與列印 PDF，再把 Plotly 與互動 HTML 保留為延伸版本。</p><strong>進入「<!-- -->成果報告<!-- -->」</strong></div></article><div class="release-drawer"><div><span>固定資料與兩份標準教材</span><h3>資料分批釋出；學生版與講師版使用同一套分析定義</h3></div><div class="release-downloads"><a href="./downloads/jinyuliang_student_release_1.zip" download="">第一批・名冊與問卷 ↓</a><a href="./downloads/jinyuliang_student_release_2.zip" download="">第二批・人體檢驗 ↓</a><a href="./downloads/jinyuliang_student_release_3.zip" download="">第三批・食品與環境 ↓</a><a href="./downloads/jinyuliang_student_plotly_prompt.ipynb" download="">學生 Prompt 版 ↓</a><a href="./downloads/jinyuliang_instructor_publication_workbench.ipynb" download="">講師 publication 版 ↓</a></div></div></section><section class="report-section" id="report"><div class="report-scroll"><div class="report-copy"><div class="section-code">S3 · 成果報告</div><p class="eyebrow"><span></span> 終章・御前奏報</p><h2>先完成可交付的正式報告，再保留互動版本作延伸</h2><p>講師版工作台把同一套分析結果製成 publication PNG／SVG、可編輯 Word 與列印版 PDF；學生 Prompt 版則保留空白程式格與人工驗收點。Plotly hover 與互動 HTML 放在最後，作為探索與展示的延伸。</p><ol><li><b>固定分析結果</b><span>保留病例定義、分析分母、原始計數、估計值與限制</span></li><li><b>輸出 publication 圖</b><span>每張正式圖同時產生 PNG 與可編輯 SVG</span></li><li><b>組裝正式文件</b><span>生成可編輯 Word 與適合列印、交付的 PDF</span></li><li><b>延伸互動版本</b><span>最後再輸出含 Plotly hover 的離線 HTML，供探索與展示</span></li></ol><div class="report-actions"><a class="button primary" href="./downloads/jinyuliang_student_plotly_prompt.ipynb" download="">下載學生 Prompt 版</a><a class="button ghost" href="./downloads/jinyuliang_instructor_publication_workbench.ipynb" download="">下載講師 publication 版</a><span>兩份教材使用同一批固定資料與分析定義：學生版練習向 AI 下規格並驗收；講師版提供完整程式、正式圖表與 Word／PDF／HTML 匯出。</span></div></div><aside class="report-preview" aria-label="調查報告章節示意"><div class="report-preview-head"><span>御醫署群聚調查奏報</span><b>完全虛構案例</b></div><h3>千秋宴疑似金玉良炎群聚</h3><p>事件摘要、調查時間線、病例定義、Person／Time／Place、食品分析、調整模型、檢驗與環境證據、限制及結論。</p><div class="mini-report-chart"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="mini-report-lines"><span></span><span></span><span></span><span></span></div><small>主要交付：publication PNG／SVG、可編輯 Word、列印版 PDF。延伸交付：Plotly 互動 HTML。</small></aside></div></section><section class="release-section conclusion-section" id="conclusion"><div class="section-heading"><div class="section-code">S4 · 結案與後續追蹤</div><p class="eyebrow"><span></span> 結案原則</p><h2>最後交付是一條可稽核的證據鏈</h2><p>每個數字都能回到資料表、分母與程式輸出；每段結論也標示適用範圍與下一步證據需求。</p></div><div class="release-grid"><article class="release-card active"><div class="release-label">第一層</div><h3>確認群聚</h3><p>說清楚通報門檻、事件分母、病例定義、病例數與時間地點型態。</p><span class="lock">確認發生什麼</span></article><article class="release-card active"><div class="release-label">第二層</div><h3>比較病因假說</h3><p>整合暴露率、粗與調整效果、缺失敏感度及食品共現。</p><span class="lock">比較哪個解釋較合理</span></article><article class="release-card active"><div class="release-label">第三層</div><h3>分開確認層級</h3><p>檢驗結果、個案分類、群聚病因與食品媒介分層判定。</p><span class="lock">讓每項證據停在正確層級</span></article></div><section class="future-outlook"><header><span>後續追蹤</span><h3>另開新案例時，再加入三種方法</h3><p>這些方法各自回答不同研究設計的問題；主案例的單日封閉群聚缺少它們所需的追蹤結構或比較母體。</p></header><div><article><small>長期個人追蹤</small><h4>Kaplan–Meier 與 Cox proportional hazards model</h4><p>適用於每人追蹤長度不同、具有事件時間與設限資料的研究，可比較發病或存活速度並估計 hazard ratio。</p></article><article><small>跨人口率比較</small><h4>直接或間接年齡標準化</h4><p>適用於比較不同國家、年代或地區的率，且各群體年齡結構不同；需要年齡別事件數、人口時間與標準人口。</p></article><article><small>多研究證據整合</small><h4>Meta-analysis 與森林圖</h4><p>適用於多篇相互獨立研究，需取得各研究效果量、標準誤、研究設計與異質性資訊；一場群聚內的十項食品並不是十篇研究。</p></article></div></section><div class="closing-line"><span class="brand-seal" aria-hidden="true">結</span><p>你用一套可重跑、可質疑、可驗證的調查流程，把每張圖組成完整證據鏈。</p></div></section><footer><div><span class="brand-seal small" aria-hidden="true">金</span><strong>金玉良炎</strong></div><p>完全虛構的 AI Code 協作與公共衛生資料分析教學案例</p></footer></main><script id="_R_">import("./assets/index-Cal9Q6Va.js")</script></body></html><script>self.__VINEXT_RSC_CHUNKS__=self.__VINEXT_RSC_CHUNKS__||[];self.__VINEXT_RSC_CHUNKS__.push("2:I[\"8c0f216c4604\",[],\"Children\",1]\n3:I[\"15c18cfaeeff\",[],\"LayoutSegmentProvider\",1]\n4:I[\"8c0f216c4604\",[],\"Slot\",1]\n5:I[\"593f344dc510\",[],\"RedirectBoundary\",1]\n:HL[\"./assets/index-BQELNeD6.css\",\"style\"]\n")</script><script>self.__VINEXT_RSC_CHUNKS__=self.__VINEXT_RSC_CHUNKS__||[];self.__VINEXT_RSC_CHUNKS__.push("0:{\"__route\":\"route:/\",\"__interceptionContext\":null,\"__layoutIds\":[\"layout:/\"],\"__rootLayout\":\"/\",\"page:/\":\"$L1\",\"layout:/\":[[[[\"$\",\"link\",\"css:./assets/index-BQELNeD6.css\",{\"rel\":\"stylesheet\",\"precedence\":\"vite-rsc/importer-resources\",\"href\":\"./assets/index-BQELNeD6.css\",\"data-rsc-css-href\":\"./assets/index-BQELNeD6.css\"}],\"$undefined\"],[\"$\",\"html\",null,{\"lang\":\"zh-Hant\",\"children\":[\"$\",\"body\",null,{\"children\":[\"$\",\"$L2\",null,{}]}]}]],null],\"route:/\":[[[\"$\",\"meta\",null,{\"charSet\":\"utf-8\"}],[[\"$\",\"title\",\"0\",{\"children\":\"金玉良炎：AI 公衛資料分析工作坊\"}],[\"$\",\"meta\",\"1\",{\"name\":\"description\",\"content\":\"沿著宮廷群聚調查故事，使用 Python、Google Colab 與 Gemini 把公衛問題逐步轉成可驗證的分析。\"}],[\"$\",\"meta\",\"2\",{\"property\":\"og:title\",\"content\":\"金玉良炎：AI 公衛資料分析工作坊\"}],[\"$\",\"meta\",\"3\",{\"property\":\"og:description\",\"content\":\"從七份疑似通報開始，把病例定義、流行曲線、食品分析、調整模型與證據整合寫成 Python。\"}],[\"$\",\"meta\",\"4\",{\"property\":\"og:type\",\"content\":\"website\"}],[\"$\",\"meta\",\"5\",{\"property\":\"og:image\",\"content\":\"https://jinyuliang-workshop.allenphant11.chatgpt.site/og.png\"}],[\"$\",\"meta\",\"6\",{\"property\":\"og:image:width\",\"content\":\"1672\"}],[\"$\",\"meta\",\"7\",{\"property\":\"og:image:height\",\"content\":\"941\"}],[\"$\",\"meta\",\"8\",{\"property\":\"og:image:alt\",\"content\":\"金玉良炎 AI 公衛資料分析工作坊\"}],[\"$\",\"meta\",\"9\",{\"name\":\"twitter:card\",\"content\":\"summary_large_image\"}],[\"$\",\"meta\",\"10\",{\"name\":\"twitter:title\",\"content\":\"金玉良炎：AI 公衛資料分析工作坊\"}],[\"$\",\"meta\",\"11\",{\"name\":\"twitter:description\",\"content\":\"把公衛判斷流程寫成 Python。\"}],[\"$\",\"meta\",\"12\",{\"name\":\"twitter:image\",\"content\":\"https://jinyuliang-workshop.allenphant11.chatgpt.site/og.png\"}],[\"$\",\"link\",\"13\",{\"rel\":\"shortcut icon\",\"href\":\"https://jinyuliang-workshop.allenphant11.chatgpt.site/favicon.svg\"}],[\"$\",\"link\",\"14\",{\"rel\":\"icon\",\"href\":\"https://jinyuliang-workshop.allenphant11.chatgpt.site/favicon.svg\"}]],[[\"$\",\"meta\",\"0\",{\"name\":\"viewport\",\"content\":\"width=device-width, initial-scale=1\"}]]],[\"$\",\"$L3\",null,{\"segmentMap\":{\"children\":[]},\"children\":[\"$\",\"$L4\",null,{\"id\":\"layout:/\",\"parallelSlots\":\"$undefined\",\"children\":[\"$\",\"$L5\",null,{\"children\":[\"$\",\"$L3\",null,{\"segmentMap\":{\"children\":[]},\"children\":[\"$\",\"$L4\",null,{\"id\":\"page:/\"}]}]}]}]}]],\"__layoutFlags\":{\"layout:/\":\"s\"},\"__artifactCompatibility\":{\"schemaVersion\":1,\"graphVersion\":\"app-route-graph:4uhn5s1wvoptc\",\"deploymentVersion\":\"f704fb8c-2ffb-4137-b17c-d730a59e34c2\",\"appElementsSchemaVersion\":1,\"rscPayloadSchemaVersion\":1,\"rootBoundaryId\":\"/\",\"renderEpoch\":null}}\n")</script><script>self.__VINEXT_RSC_CHUNKS__=self.__VINEXT_RSC_CHUNKS__||[];self.__VINEXT_RSC_CHUNKS__.push("6:I[\"6efdf509a785\",[],\"default\",1]\n1:[\"$\",\"$L6\",null,{\"params\":\"$@7\",\"searchParams\":\"$@8\"}]\n")</script><script>self.__VINEXT_RSC_CHUNKS__=self.__VINEXT_RSC_CHUNKS__||[];self.__VINEXT_RSC_CHUNKS__.push("7:{}\n8:{}\n")</script><script>self.__VINEXT_RSC_DONE__=true</script>

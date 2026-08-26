@@ -1,0 +1,68 @@
+dataset_name,column_name,data_type,allowed_values,missing_allowed,english_description,traditional_chinese_description
+person_line_list.csv,person_id,string,P0001 format,no,Synthetic participant identifier.,無意義的合成參與者編號。
+person_line_list.csv,site_id,category,zhaohua_hall; hengfang_court; chengyue_terrace,no,Assigned banquet site.,宴席場地代碼。
+person_line_list.csv,role_group,category,inner_court_guest; court_attendant; palace_guard; music_dance_staff; kitchen_service_staff,no,Broad fictional court role group.,架空宮廷身分類別。
+person_line_list.csv,age_band,category,under_20; 20_29; 30_39; 40_49; 50_plus,no,Synthetic age band.,合成年齡分組。
+person_line_list.csv,meal_session,category,early; late,no,Meal serving session.,供餐席次。
+person_line_list.csv,meal_set_id,category,jade_set; orchid_set; plain_set,no,Meal set assigned to the participant.,參與者餐套類型。
+person_line_list.csv,meal_start_datetime,datetime,ISO 8601,no,meal start datetime,用餐開始／結束時間。
+person_line_list.csv,meal_end_datetime,datetime,ISO 8601,no,meal end datetime,用餐開始／結束時間。
+person_line_list.csv,survey_response,integer,0; 1,no,Whether the questionnaire was completed.,是否完成問卷。
+person_line_list.csv,survey_datetime,datetime,ISO 8601,yes,survey datetime,問卷完成時間
+person_line_list.csv,symptom_onset_datetime,datetime,ISO 8601,yes,symptom onset datetime,自述發病時間
+person_line_list.csv,symptom_end_datetime,datetime,ISO 8601,yes,symptom end datetime,自述症狀結束時間
+person_line_list.csv,nausea,integer,0; 1,yes,Reported nausea.,是否回報症狀：nausea。
+person_line_list.csv,vomiting,integer,0; 1,yes,Reported vomiting.,是否回報症狀：vomiting。
+person_line_list.csv,diarrhea,integer,0; 1,yes,Reported diarrhea.,是否回報症狀：diarrhea。
+person_line_list.csv,abdominal_cramps,integer,0; 1,yes,Reported abdominal_cramps.,是否回報症狀：abdominal_cramps。
+person_line_list.csv,fatigue,integer,0; 1,yes,Reported fatigue.,是否回報症狀：fatigue。
+person_line_list.csv,headache,integer,0; 1,yes,Reported headache.,是否回報症狀：headache。
+person_line_list.csv,low_grade_fever,integer,0; 1,yes,Reported low_grade_fever.,是否回報症狀：low_grade_fever。
+person_line_list.csv,dizziness,integer,0; 1,yes,Reported dizziness.,是否回報症狀：dizziness。
+person_line_list.csv,rash,integer,0; 1,yes,Reported rash.,是否回報症狀：rash。
+person_line_list.csv,vomiting_count_24h,integer,0-10,yes,Vomiting episodes in 24 hours.,24 小時內嘔吐次數。
+person_line_list.csv,loose_stool_count_24h,integer,0-14,yes,Loose stools in 24 hours.,24 小時內稀便次數。
+person_line_list.csv,medical_visit,integer,0; 1,yes,medical visit,是否就醫
+person_line_list.csv,hospitalized,integer,0; 1,yes,hospitalized,是否住院
+person_line_list.csv,specimen_collected,integer,0; 1,yes,specimen collected,是否採集檢體
+food_exposure.csv,person_id,string,P0001 format,no,Participant identifier.,參與者編號。
+food_exposure.csv,food_id,category,jade_dew_custard; harmony_osmanthus_drink; golden_lotus_pastry; pine_duck_roll; snow_pear_soup; plum_glazed_root; sesame_rice_cake; fragrant_mushroom_bundle; spring_herb_salad; imperial_dark_tea,no,Food identifier.,食物代碼。
+food_exposure.csv,reported_consumed,integer,0; 1,yes,Reported food consumption.,回報是否食用。
+food_exposure.csv,serving_amount_category,category,none; low; medium; high,yes,Reported portion category.,回報食用份量類別。
+food_exposure.csv,recall_confidence,category,low; medium; high,yes,Recall confidence.,回憶信心。
+food_exposure.csv,serving_batch_id,string,batch code,no,Serving batch from menu records.,供餐紀錄中的批次代碼。
+food_exposure.csv,response_source,category,none; interview; serving_record; both,no,Exposure information source.,暴露資料來源。
+food_exposure.csv,missing_reason,category,blank; survey_nonresponse; item_skipped; unclear_memory,yes,Reason for missing exposure.,暴露資料缺失原因。
+menu_by_site.csv,site_id,category,see values,no,site id,場地代碼
+menu_by_site.csv,site_name_zh,string,see values,no,site name zh,場地繁體中文名稱
+menu_by_site.csv,meal_session,category,see values,no,meal session,供餐席次
+menu_by_site.csv,meal_set_id,category,see values,no,meal set id,餐套代碼
+menu_by_site.csv,food_id,category,see values,no,food id,食物代碼
+menu_by_site.csv,food_name_zh,string,see values,no,food name zh,食物繁體中文名稱
+menu_by_site.csv,food_offered,integer,see values,no,food offered,是否供應
+menu_by_site.csv,serving_batch_id,string,see values,no,serving batch id,供餐批次
+menu_by_site.csv,scheduled_service_datetime,datetime,see values,no,scheduled service datetime,預定供餐時間
+menu_by_site.csv,actual_service_datetime,datetime,see values,no,actual service datetime,實際供餐時間
+lab_results.csv,sample_id,string,see field manual,no,sample id,檢體編號
+lab_results.csv,source_type,category,see field manual,no,source type,檢體來源類型
+lab_results.csv,person_id,string,see field manual,yes,person id,參與者外鍵
+lab_results.csv,food_id,category,see field manual,yes,food id,食品外鍵
+lab_results.csv,site_id,category,see field manual,no,site id,場地代碼
+lab_results.csv,collection_datetime,datetime,see field manual,no,collection datetime,採檢時間
+lab_results.csv,test_name,category,see field manual,no,test name,虛構檢驗名稱
+lab_results.csv,target_name,category,see field manual,no,target name,檢驗標的
+lab_results.csv,result,category,see field manual,no,result,檢驗結果
+lab_results.csv,subtype,string,see field manual,yes,subtype,虛構分型
+lab_results.csv,quantitative_value,number,see field manual,yes,quantitative value,定量結果
+lab_results.csv,unit,string,see field manual,yes,unit,定量結果單位
+environment_log.csv,log_id,string,see field manual,no,log id,環境紀錄編號
+environment_log.csv,site_id,category,see field manual,no,site id,場地代碼
+environment_log.csv,serving_batch_id,string,see field manual,no,serving batch id,食品批次
+environment_log.csv,food_id,category,see field manual,no,food id,食物代碼
+environment_log.csv,record_datetime,datetime,see field manual,no,record datetime,紀錄時間
+environment_log.csv,measurement_type,category,see field manual,no,measurement type,測量類型
+environment_log.csv,temperature_c,number,see field manual,yes,temperature c,攝氏溫度
+environment_log.csv,holding_duration_minutes,integer,see field manual,no,holding duration minutes,候膳分鐘數
+environment_log.csv,record_source,category,see field manual,no,record source,紀錄來源
+environment_log.csv,record_quality,category,see field manual,no,record quality,紀錄品質
+environment_log.csv,missing_reason,category,see field manual,yes,missing reason,缺失原因
