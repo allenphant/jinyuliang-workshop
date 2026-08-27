@@ -1,0 +1,8 @@
+report_id,report_time,person_id,reported_site,attended_banquet,vomiting,diarrhea_24h,note
+IR001,1717-09-17T05:40,P0233,hengfang_court,1,1,0,蘅芳苑當值女官夜間嘔吐後由醫官通報
+IR002,1717-09-17T05:48,P0196,chengyue_terrace,1,0,4,承月臺內廷賓客連續水便就診
+IR003,1717-09-17T05:55,P0202,hengfang_court,1,1,3,蘅芳苑侍衛嘔吐併腹瀉
+IR004,1717-09-17T06:04,P0149,zhaohua_hall,1,1,0,昭華殿內廷賓客反覆嘔吐
+IR005,1717-09-17T06:12,P0150,zhaohua_hall,1,0,5,昭華殿侍衛水便五次
+IR006,1717-09-17T06:18,,,0,1,0,城南市集攤商嘔吐，未參加千秋宴
+IR007,1717-09-17T06:25,,,0,0,1,宮外雜役腹瀉一次，未參加千秋宴

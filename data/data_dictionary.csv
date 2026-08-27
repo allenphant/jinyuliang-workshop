@@ -66,3 +66,11 @@ environment_log.csv,holding_duration_minutes,integer,see field manual,no,holding
 environment_log.csv,record_source,category,see field manual,no,record source,紀錄來源
 environment_log.csv,record_quality,category,see field manual,no,record quality,紀錄品質
 environment_log.csv,missing_reason,category,see field manual,yes,missing reason,缺失原因
+initial_reports.csv,report_id,string,IR001 format,no,Synthetic initial report identifier.,初始通報編號，一列一份急報。
+initial_reports.csv,report_time,datetime,ISO 8601,no,Time the report reached the reporting office.,疫報司收到該份急報的時間。
+initial_reports.csv,person_id,string,P0001 format,yes,"Roster link, blank when the reporter did not attend the banquet.",可連回名冊的參與者編號；非與宴者留空。
+initial_reports.csv,reported_site,category,zhaohua_hall; hengfang_court; chengyue_terrace,yes,Banquet site stated in the report.,通報中陳述的宴席場地；非與宴者留空。
+initial_reports.csv,attended_banquet,binary,0; 1,no,Whether the reporter attended the banquet.,通報者是否參加千秋宴。
+initial_reports.csv,vomiting,binary,0; 1,no,Vomiting reported at notification.,通報當下是否有嘔吐。
+initial_reports.csv,diarrhea_24h,integer,>= 0,no,Loose stools in the 24 hours before notification.,通報前 24 小時的水便次數。
+initial_reports.csv,note,string,free text,yes,Free-text note written by the reporting officer.,通報人員自由記述，不作為判定依據。
